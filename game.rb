@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require_relative 'room'
-require 'pry'
+require 'byebug'
 
 # Why couldn't I call this without ()
 def BuildMap                                                            #    N   E   S   W
@@ -26,7 +26,7 @@ def StartGame
     #output = run_command(input)
     puts(output)
     break if input.strip.downcase == 'quit'
-    binding.pry if input.strip.downcase == 'debug'
+    byebug if input.strip.downcase == 'debug'
   end
 end
 
