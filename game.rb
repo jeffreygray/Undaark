@@ -4,7 +4,7 @@ require_relative 'room'
 require 'pry'
 
 # Why couldn't I call this without ()
-def InitGame                                                            #    N   E   S   W
+def BuildMap                                                            #    N   E   S   W
   room0 = Room.new('Goblin\'s Lair', 'A dark den that smells of goblin', -1, 1, 2, -1)
   room1 = Room.new('Jungle', 'A tropical enclosure with whistling birds', -1, -1, -1, 0)
   room2 = Room.new('Cave', 'A spherical cave covered with ivy', 0, 3, -1, -1)
@@ -31,7 +31,7 @@ def StartGame
 end
 
 if __FILE__ == $PROGRAM_NAME
-  @world_map = InitGame()
+  @world_map = BuildMap()
   StartGame()
 end
 
