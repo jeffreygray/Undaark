@@ -5,7 +5,7 @@ Requirements:
 1. Ruby 3.1.2 (rbenv install 3.1.2)
 2. byebug (gem install byebug)
 
-
+To run:
 1. Pull locally
 2. chmod +x game.rb
 3. ./game.rb
