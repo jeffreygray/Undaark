@@ -7,8 +7,8 @@ This is an open source adventure game written in Ruby!
 
 ### To run:
 > 1. Pull locally
-> 2. chmod +x game.rb
-> 3. ./game.rb
+> 2. <code>chmod +x game.rb</code>
+> 3. <code>./game.rb</code>
 
 ### To play:
 > 1. Walk around using directions <code>n, e, s, w</code>
