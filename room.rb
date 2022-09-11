@@ -10,5 +10,11 @@ class Room
     @s = s
     @w = w
   end
+
+  def to_s
+    "#{name}:\n\n#{desc}"
+  end
+
+  # TODO: print exits add upon this 
 end
 
