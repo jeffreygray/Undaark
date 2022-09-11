@@ -17,7 +17,7 @@ class Player
   end
 
   def look(map)
-    s = ''
+    s = "In a #{map[location].name}, you see:\n\n"
     map[location].objects.each do |object| # Note: iterating 
       s += "#{object}\n"
     end

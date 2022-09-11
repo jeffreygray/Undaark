@@ -33,16 +33,16 @@ def build_map                                                       #    N   E  
   room0 = Room.new('Goblin\'s Lair', 'A dark den that smells of goblin', -1, 1, 2, -1, ['Goblin'])
   room1 = Room.new('Jungle', 'A tropical enclosure with whistling birds', -1, -1, -1, 0, ['Tree', 'Faerie'])
   room2 = Room.new('Cave', 'A spherical cave covered with ivy', 0, 3, -1, -1, ['Obelisk'])
-  room3 = Room.new('Crypt', 'A gloomy crypt with diseased rats', -1, -1, -1, 2, ['Rats']*4)
+  room3 = Room.new('Crypt', 'A gloomy crypt with diseased rats', -1, -1, -1, 2, ['Rat']*4)
   map = [room0, room1, room2, room3]
   map
 end
 
 def move_player(dirshort, dirlong)
-  unless @world_map[@jingle.location].send(dirshort) == -1 
-    @jingle.move_player(@world_map[@jingle.location].send(dirshort))
+  unless @world_map[@user.location].send(dirshort) == -1 
+    @user.move_player(@world_map[@user.location].send(dirshort))
     puts("You moved #{dirlong}!")
-    puts(@world_map[@jingle.location])
+    puts(@world_map[@user.location])
   else
     puts('You can\'t move that way!')
   end
@@ -61,16 +61,16 @@ def run_command(input)
   when COMMANDS[:west]
     move_player(COMMANDS[:west], 'west')
   when COMMANDS[:look]
-    @jingle.look(@world_map)
+    @user.look(@world_map)
   when COMMANDS[:debug]
     byebug
   when COMMANDS[:scan]
-    @jingle.scan(@world_map)
+    @user.scan(@world_map)
   when COMMANDS[:quit]
     puts('Quitting the game...')
     exit
   else
-    puts("#{input} unrecognized... please try another command!")
+    puts("#{input} unrecognized... please try another command.")
   end
 end
 
@@ -78,7 +78,7 @@ end
 def start_game
   input = ''
   output = ''
-  s = "Welcome, #{@jingle.name}. What would you like to do? You're in #{@world_map[@jingle.location]}"
+  s = "Welcome, #{@user.name}. What would you like to do? You're in #{@world_map[@user.location]}"
   puts(s)
   loop do
     print("> ")
@@ -90,7 +90,7 @@ def start_game
 end
 
 
-@jingle = Player.new('Cyberman', 0, 15, 15, 15)
+@user = Player.new('Adventurer', 0, 15, 15, 15)
 @goblin = Player.new('Goblin', 1, 15, 15, 15)
 @world_map = build_map
 start_game
