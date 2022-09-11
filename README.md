@@ -6,7 +6,7 @@ This is an open source adventure game written in Ruby!
 > 2. byebug <code>gem install byebug</code>
 
 ### To run:
-> 1. Pull locally
+> 1. <code>git clone https://github.com/jeffreygray/Undaark.git</code>
 > 2. <code>chmod +x game.rb</code>
 > 3. <code>./game.rb</code>
 
