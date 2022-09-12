@@ -16,9 +16,9 @@ class Player
     @location = newroom
   end
 
-  def look(map)
-    s = "In a #{map[location].name}, you see:\n\n"
-    map[location].objects.each do |object| # Note: iterating 
+  def look(room)
+    s = "In a #{room.name}, you see:\n\n"
+    room.objects.each do |object| # Note: iterating 
       s += "#{object}\n"
     end
     "#{s}\n"

@@ -61,7 +61,7 @@ def run_command(input)
   when COMMANDS[:west]
     move_player(COMMANDS[:west], 'west')
   when COMMANDS[:look]
-    @user.look(@world_map)
+    @user.look(@world_map[@user.location])
   when COMMANDS[:debug]
     byebug
   when COMMANDS[:scan]
