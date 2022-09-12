@@ -48,7 +48,7 @@ end
 def build_dungeon(difficulty, seed)
   start_index = @world_map.length
 
-  entrance = Room.new('Dungeon Entrance', 'Stairs leading down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
+  entrance = Room.new('Dungeon Entrance', 'A rope descending down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
   dungeon = [entrance]
   last_room = :entrance
 
@@ -100,7 +100,7 @@ def build_dungeon(difficulty, seed)
     end
   end
 
-  vault = Room.new('Dungeon Vault')
+  vault = Room.new('Dungeon Vault', 'There\'s nothing here', -1, -1, -1, -1, ['Rope'])
   dungeon.append(vault)
   @world_map += dungeon
 
