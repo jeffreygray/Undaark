@@ -9,8 +9,21 @@ class Player
     @str = str
     @dex = dex
     @int = int
+    @overworld = nil
   end
 
+  def enter_dungeon(newroom)
+    @overworld = @location
+    move_player(newroom)
+  end
+
+  def leave_dungeon
+    if @overworld == nil
+      puts("There's no dungeon to exit")
+    elsif
+      move_player(@overworld)
+    end
+  end
 
   def move_player(newroom)
     @location = newroom

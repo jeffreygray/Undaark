@@ -1,15 +1,13 @@
 #!/usr/bin/env ruby
 
-# 1. unrecognized
-# 2. Walk around
-# 3. scan function: Can the player investigate the world?
-# 4. How could states change? Can I have some form of advancing?
-# 5. More rats? 
-# 6. Nightmare event randomly during game tic?
+# TODO:
+# Separate game into Client <> server
 
-# TODO: Reconsider Input handling part of the player class instead of in game?
+# initialize random number generator with seed
+# Nightmare event randomly during game tic?
+# Reconsider Input handling part of the player class instead of in game?
 
-# room traps , doors getting shut
+# room traps , doors getting shut, doors locked will have the -2 added 
 # quicksand, try to leave a few times before you  get out 
 
 require_relative 'room'
@@ -27,6 +25,7 @@ COMMANDS = { # constant-ish (frozen hash)
   look: 'look',
   scan: 'scan',
   enter: 'enter',
+  climbrope: 'climb rope',
   debug: 'debug' # remove me ree!
 }.freeze
 
@@ -93,7 +92,7 @@ def build_dungeon(difficulty, seed)
       when :mob
         enemies = ['Goblin', 'Kobold', 'Ghast', 'Skeleton', 'Newt', 'Giant Rat']
         enemy = enemies[Random.rand(enemies.length)]
-        dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room"))
+        dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [enemy]))
       end
       last_room = next_room
     end
@@ -143,8 +142,14 @@ def run_command(input)
     move_player(COMMANDS[:west], 'west')
   when COMMANDS[:look]
     @player.look(@world_map[@player.location])
+  when COMMANDS[:climbrope]
+    if @world_map[@player.location].name == "Dungeon Vault" || @world_map[@player.location].name == "Dungeon Entrance"
+      @player.leave_dungeon
+    else
+      puts("You're not in a dungeon entrance or exit.")
+    end
   when COMMANDS[:enter]
-    @player.move_player(build_dungeon(5, 0))
+    @player.enter_dungeon(build_dungeon(5, 0))
     puts("You entered a new dungeon!")
   when COMMANDS[:debug]
     byebug

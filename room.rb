@@ -2,7 +2,7 @@
 class Room
   attr_accessor :name, :desc, :n, :e, :s, :w, :objects
 
-  def initialize(name = 'The Void', desc = "There's nothing here!", n = -1, e = -1, s = -1, w = -1, objects = nil)
+  def initialize(name = 'The Void', desc = "There's nothing here!", n = -1, e = -1, s = -1, w = -1, objects = [])
     @name = name
     @desc = desc
     @n = n
