@@ -47,11 +47,19 @@ end
 
 def build_dungeon(difficulty, seed)
   start_index = @world_map.length
+
   entrance = Room.new('Dungeon Entrance', 'Stairs leading down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
+
+
+
   dungeon = [entrance]
+
+
+
   last_room = :entrance
-  for b in 1..(1+2*difficulty) do
-    if Random.rand < 0.5 
+
+  for b in 1..(5) do
+    if true
       # new room Markov chain
       case last_room
       when :entrance
@@ -97,25 +105,29 @@ def build_dungeon(difficulty, seed)
       last_room = next_room
     end
   end
+
   vault = Room.new('Dungeon Vault')
   dungeon.append(vault)
   @world_map += dungeon
+
   dungeon.each_with_index do |room, di|
     if di > 0
       i = start_index + di
-      # connect_rooms(start_index + i - 1, start_index + i, :south)
+      connect_rooms(start_index + i - 1, start_index + i, :south)
       # entrance.s = start_index + dungeon.length
       dungeon[di - 1].s = i
       room.n = i - 1
     end
   end
+
   start_index
 end
 
 def connect_rooms(room1_i, room2_i, dir)
-  # byebug 
-  # @world_map[room1_i].send(COMMANDS[dir]) = room2_i
-  # @world_map[room1_i].send(COMMANDS[OPPOSITE[dir]]) = room2_i
+  room = @world_map[room1_i]
+
+  room.send("#{COMMANDS[dir]}=", room2_i) if room
+  room.send("#{COMMANDS[OPPOSITE[dir]]}=", room2_i) if room
 end
 
 def move_player(dirshort, dirlong)
@@ -152,6 +164,7 @@ def run_command(input)
     @player.enter_dungeon(build_dungeon(5, 0))
     puts("You entered a new dungeon!")
   when COMMANDS[:debug]
+    puts("Entering debug mode, use 'pw' to print the world")
     byebug
   when COMMANDS[:scan]
     @player.scan(@world_map)
@@ -175,6 +188,12 @@ def start_game
     # TODO: make this do shit
     output = run_command(input)
     puts(output)
+  end
+end
+
+def pw
+  @world_map.each_with_index do |room, inx|
+    puts "room:#{inx} n: #{room.n}, e: #{room.e}, s: #{room.s}, w: #{room.w} name: #{room.name}"
   end
 end
 
