@@ -2,7 +2,7 @@
 
 # 1. unrecognized
 # 2. Walk around
-# 3. scan function: Can the user investigate the world?
+# 3. scan function: Can the player investigate the world?
 # 4. How could states change? Can I have some form of advancing?
 # 5. More rats? 
 # 6. Nightmare event randomly during game tic?
@@ -26,8 +26,16 @@ COMMANDS = { # constant-ish (frozen hash)
   quit: 'quit',
   look: 'look',
   scan: 'scan',
+  enter: 'enter',
   debug: 'debug' # remove me ree!
 }.freeze
+
+OPPOSITE = {
+  north: :south,
+  south: :north,
+  east: :west,
+  west: :east
+}
 
 def build_map                                                       #    N   E   S   W
   room0 = Room.new('Goblin\'s Lair', 'A dark den that smells of goblin', -1, 1, 2, -1, ['Goblin'])
@@ -38,11 +46,84 @@ def build_map                                                       #    N   E  
   map
 end
 
+def build_dungeon(difficulty, seed)
+  start_index = @world_map.length
+  entrance = Room.new('Dungeon Entrance', 'Stairs leading down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
+  dungeon = [entrance]
+  last_room = :entrance
+  for b in 1..(1+2*difficulty) do
+    if Random.rand < 0.5 
+      # new room Markov chain
+      case last_room
+      when :entrance
+        next_room = :corridor
+      when :corridor
+        if Random.rand < 0.4
+          next_room = :corridor
+        elsif Random.rand < 0.5
+          next_room = :mob
+        else
+          next_room = :trap
+        end
+      when :mob
+        if Random.rand < 0.3
+          next_room = :mob
+        else
+          next_room = :corridor
+        end
+      when :trap
+        next_room = :mob
+      end
+
+      case next_room
+      when :corridor
+        if Random.rand < 0.5
+          dungeon.append(Room.new('Dungeon Corridor', 'An eerie corridor lined with torches and cobwebs'))
+        else
+          dungeon.append(Room.new('Dungeon Corridor', 'A dusty path'))
+        end
+      when :trap
+        if Random.rand(3) < 1
+          dungeon.append(Room.new('Quicksand', 'AAAAAAAAAAAAAAAAAAAAA'))
+        elsif Random.rand < 0.5
+          dungeon.append(Room.new('Innocent-Looking Room', 'It\'s just a room'))
+        else
+          dungeon.append(Room.new('Puzzle Room', 'idk figure it out'))
+        end
+      when :mob
+        enemies = ['Goblin', 'Kobold', 'Ghast', 'Skeleton', 'Newt', 'Giant Rat']
+        enemy = enemies[Random.rand(enemies.length)]
+        dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room"))
+      end
+      last_room = next_room
+    end
+  end
+  vault = Room.new('Dungeon Vault')
+  dungeon.append(vault)
+  @world_map += dungeon
+  dungeon.each_with_index do |room, di|
+    if di > 0
+      i = start_index + di
+      # connect_rooms(start_index + i - 1, start_index + i, :south)
+      # entrance.s = start_index + dungeon.length
+      dungeon[di - 1].s = i
+      room.n = i - 1
+    end
+  end
+  start_index
+end
+
+def connect_rooms(room1_i, room2_i, dir)
+  # byebug 
+  # @world_map[room1_i].send(COMMANDS[dir]) = room2_i
+  # @world_map[room1_i].send(COMMANDS[OPPOSITE[dir]]) = room2_i
+end
+
 def move_player(dirshort, dirlong)
-  unless @world_map[@user.location].send(dirshort) == -1 
-    @user.move_player(@world_map[@user.location].send(dirshort))
+  unless @world_map[@player.location].send(dirshort) == -1 
+    @player.move_player(@world_map[@player.location].send(dirshort))
     puts("You moved #{dirlong}!")
-    puts(@world_map[@user.location])
+    puts(@world_map[@player.location])
   else
     puts('You can\'t move that way!')
   end
@@ -61,11 +142,14 @@ def run_command(input)
   when COMMANDS[:west]
     move_player(COMMANDS[:west], 'west')
   when COMMANDS[:look]
-    @user.look(@world_map[@user.location])
+    @player.look(@world_map[@player.location])
+  when COMMANDS[:enter]
+    @player.move_player(build_dungeon(5, 0))
+    puts("You entered a new dungeon!")
   when COMMANDS[:debug]
     byebug
   when COMMANDS[:scan]
-    @user.scan(@world_map)
+    @player.scan(@world_map)
   when COMMANDS[:quit]
     puts('Quitting the game...')
     exit
@@ -78,7 +162,7 @@ end
 def start_game
   input = ''
   output = ''
-  s = "Welcome, #{@user.name}. What would you like to do? You're in #{@world_map[@user.location]}"
+  s = "Welcome, #{@player.name}. What would you like to do? You're in #{@world_map[@player.location]}"
   puts(s)
   loop do
     print("> ")
@@ -90,7 +174,7 @@ def start_game
 end
 
 
-@user = Player.new('Adventurer', 0, 15, 15, 15)
+@player = Player.new('Adventurer', 0, 15, 15, 15)
 @goblin = Player.new('Goblin', 1, 15, 15, 15)
 @world_map = build_map
 start_game
