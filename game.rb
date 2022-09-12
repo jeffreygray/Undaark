@@ -104,13 +104,20 @@ def build_dungeon(difficulty, seed)
   dungeon.append(vault)
   @world_map += dungeon
 
+  last_dir = nil
+  next_dir = nil
+  dirs = [:north, :south, :east, :west]
   dungeon.each_with_index do |room, di|
     if di > 0
+      next_dir = dirs[Random.rand(dirs.length)]
+      if last_dir
+        while next_dir == OPPOSITE[last_dir]
+          next_dir = dirs[Random.rand(dirs.length)]
+        end
+      end
       i = start_index + di
-      connect_rooms(start_index + i - 1, start_index + i, :south)
-      # entrance.s = start_index + dungeon.length
-      dungeon[di - 1].s = i
-      room.n = i - 1
+      connect_rooms(i - 1, i, next_dir)
+      last_dir = next_dir
     end
   end
 
@@ -118,10 +125,11 @@ def build_dungeon(difficulty, seed)
 end
 
 def connect_rooms(room1_i, room2_i, dir)
-  room = @world_map[room1_i]
+  room1 = @world_map[room1_i]
+  room2 = @world_map[room2_i]
 
-  room.send("#{COMMANDS[dir]}=", room2_i) if room
-  room.send("#{COMMANDS[OPPOSITE[dir]]}=", room2_i) if room
+  room1.send("#{COMMANDS[dir]}=", room2_i) if room1
+  room2.send("#{COMMANDS[OPPOSITE[dir]]}=", room1_i) if room2
 end
 
 def move_player(dirshort, dirlong)
