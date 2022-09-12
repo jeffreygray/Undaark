@@ -7,8 +7,8 @@
 # Nightmare event randomly during game tic?
 # Reconsider Input handling part of the player class instead of in game?
 
-# room traps , doors getting shut, doors locked will have the -2 added 
-# quicksand, try to leave a few times before you  get out 
+# room traps , doors getting shut, doors locked will have the -2 added
+# quicksand, try to leave a few times before you  get out
 
 require_relative 'room'
 require_relative 'player'
@@ -49,17 +49,11 @@ def build_dungeon(difficulty, seed)
   start_index = @world_map.length
 
   entrance = Room.new('Dungeon Entrance', 'Stairs leading down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
-
-
-
   dungeon = [entrance]
-
-
-
   last_room = :entrance
 
-  for b in 1..(5) do
-    if true
+  for b in 1..(1+2*difficulty) do
+    if Random.rand < 0.5
       # new room Markov chain
       case last_room
       when :entrance
@@ -131,7 +125,7 @@ def connect_rooms(room1_i, room2_i, dir)
 end
 
 def move_player(dirshort, dirlong)
-  unless @world_map[@player.location].send(dirshort) == -1 
+  unless @world_map[@player.location].send(dirshort) == -1
     @player.move_player(@world_map[@player.location].send(dirshort))
     puts("You moved #{dirlong}!")
     puts(@world_map[@player.location])
@@ -176,7 +170,7 @@ def run_command(input)
   end
 end
 
-# Game Loop 
+# Game Loop
 def start_game
   input = ''
   output = ''

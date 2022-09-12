@@ -24,6 +24,6 @@ class Room
     "#{name}:\n\n#{desc}"
   end
 
-  # TODO: print exits add upon this 
+  # TODO: print exits add upon this
 end
 

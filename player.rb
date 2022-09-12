@@ -31,7 +31,7 @@ class Player
 
   def look(room)
     s = "In a #{room.name}, you see:\n\n"
-    room.objects.each do |object| # Note: iterating 
+    room.objects.each do |object| # Note: iterating
       s += "#{object}\n"
     end
     "#{s}\n"
