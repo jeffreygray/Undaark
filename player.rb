@@ -22,7 +22,12 @@ class Player
       puts("There's no dungeon to exit")
     elsif
       move_player(@overworld)
+      @overworld = nil
     end
+  end
+
+  def is_in_dungeon
+    @overworld != nil
   end
 
   def move_player(newroom)

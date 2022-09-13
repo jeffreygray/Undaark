@@ -72,8 +72,12 @@ def run_command(input)
       puts("You're not in a dungeon entrance or exit.")
     end
   when COMMANDS[:enter]
-    @player.enter_dungeon(@world_map.build_dungeon(5, 0))
-    puts("You entered a new dungeon!")
+    if @player.is_in_dungeon
+      puts("You're already in a dungeon!")
+    else
+      @player.enter_dungeon(@world_map.build_dungeon(5, 0))
+      puts("You entered a new dungeon!")
+    end
   when COMMANDS[:debug]
     puts("Entering debug mode, use 'pw' to print the world")
     byebug
