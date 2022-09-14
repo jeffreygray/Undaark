@@ -1,11 +1,16 @@
 class WorldMap
 
+  attr_accessor :map
+
   def initialize()
     room0 = Room.new('Goblin\'s Lair', 'A dark den that smells of goblin', -1, 1, 2, -1, ['Goblin'])
     room1 = Room.new('Jungle', 'A tropical enclosure with whistling birds', -1, -1, -1, 0, ['Tree', 'Faerie'])
     room2 = Room.new('Cave', 'A spherical cave covered with ivy', 0, 3, -1, -1, ['Obelisk'])
     room3 = Room.new('Crypt', 'A gloomy crypt with diseased rats', -1, -1, -1, 2, ['Rat']*4)
+
+    # TODO: should move out of initialize method
     @map = [room0, room1, room2, room3]
+    add_rooms(Generators::Room.build(5), @map.length - 1)
   end
 
   def get_room(location)
@@ -37,6 +42,7 @@ class WorldMap
   def connect_rooms(room1_i, room2_i, dir)
     room1 = @map[room1_i]
     room2 = @map[room2_i]
+
     room1.send("#{COMMANDS[dir]}=", room2_i) if room1
     room2.send("#{COMMANDS[OPPOSITE[dir]]}=", room1_i) if room2
   end
@@ -48,7 +54,7 @@ class WorldMap
     dungeon = [entrance]
     last_room = :entrance
 
-    for b in 1..(1+2*difficulty) do
+    (1+2*difficulty).times do
       if Random.rand < 0.5
         # new room Markov chain
         case last_room
@@ -98,26 +104,28 @@ class WorldMap
 
     vault = Room.new('Dungeon Vault', 'There\'s nothing here', -1, -1, -1, -1, ['Rope'])
     dungeon.append(vault)
-    @map += dungeon
 
-    last_dir = nil
-    next_dir = nil
-
-    dungeon.each_with_index do |room, di|
-      if di > 0
-        next_dir = DIRS.sample
-        if last_dir
-          while next_dir == OPPOSITE[last_dir]
-            next_dir = DIRS.sample
-          end
-        end
-        i = start_index + di
-        connect_rooms(i - 1, i, next_dir)
-        last_dir = next_dir
-      end
-    end
+    add_rooms(dungeon, start_index + 1)
 
     start_index
+  end
+
+  def add_rooms(rooms, start_index)
+    @map += rooms
+
+    last_dir = nil
+
+    (rooms.count + 1).times do |ri|
+      next_dir = DIRS.sample
+      if last_dir
+        while next_dir == OPPOSITE[last_dir]
+          next_dir = DIRS.sample
+        end
+      end
+      i = start_index + ri
+      connect_rooms(i - 1, i, next_dir)
+      last_dir = next_dir
+    end
   end
 
   def pw

@@ -13,6 +13,7 @@
 require_relative 'room'
 require_relative 'player'
 require_relative 'world_map'
+require_relative 'generators/room'
 require 'byebug'
 
 # vars, etc
