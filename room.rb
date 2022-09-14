@@ -1,16 +1,15 @@
 
 class Room
-  attr_accessor :name, :desc, :n, :e, :s, :w, :objects
+  attr_accessor :name, :desc, :north, :east, :south, :west, :objects
 
-  def initialize(name = 'The Void', desc = "There's nothing here!", n = -1, e = -1, s = -1, w = -1, objects = [])
+  def initialize(name = 'The Void', desc = "There's nothing here!", north = -1, east = -1, south = -1, west = -1, objects = [])
     @name = name
     @desc = desc
-    @n = n
-    @e = e
-    @s = s
-    @w = w
+    @north = north
+    @east = east
+    @south = south
+    @west = west
     @objects = objects
-    @exits = get_current_room_exits # TODO: make sure this works
   end
 
   # making this method instead of having [exits] in initializer since we build exits in world_map
@@ -18,10 +17,10 @@ class Room
     # We might keep this or just use adjacent rooms
   def get_current_room_exits
     exits = []
-    exits.append("North") if @n != -1
-    exits.append("East") if @e != -1
-    exits.append("South") if @s != -1
-    exits.append("West") if @w != -1
+    exits.append(NORTH) if @north != -1
+    exits.append(EAST) if @east != -1
+    exits.append(SOUTH) if @south != -1
+    exits.append(WEST) if @west != -1
     exits 
   end
 

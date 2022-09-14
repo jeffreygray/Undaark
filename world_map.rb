@@ -36,10 +36,10 @@ class WorldMap
   def adjacent_rooms(instance, location)
     room = get_room(instance, location)
     {
-      north: get_room(instance, room.n),
-      east: get_room(instance, room.e),
-      south: get_room(instance, room.s),
-      west: get_room(instance, room.w)
+      north: get_room(instance, room.north),
+      east: get_room(instance, room.east),
+      south: get_room(instance, room.south),
+      west: get_room(instance, room.west)
     }
   end
 

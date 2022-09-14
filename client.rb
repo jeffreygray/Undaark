@@ -4,24 +4,39 @@ require_relative 'game'
 require 'byebug'
 
 # vars, etc
+NORTH = 'north';
+EAST = 'east';
+SOUTH =  'south';
+WEST = 'west';
+QUIT = 'quit';
+LOOK = 'look';
+SCAN = 'scan';
+ENTER = 'enter';
+CLIMB_ROPE = 'climb-rope';
+DEBUG = 'debug';
+
 COMMANDS = { # constant-ish (frozen hash)
-  north: 'n',
-  east: 'e',
-  south: 's',
-  west: 'w',
-  ree: 'ree',
-  quit: 'quit',
-  look: 'look',
-  scan: 'scan',
-  enter: 'enter',
-  climbrope: 'climb rope',
-  debug: 'debug' # remove me ree!
+  north: NORTH,
+  n: NORTH,
+  east: EAST,
+  e: EAST,
+  south: SOUTH,
+  s: SOUTH,
+  west: WEST,
+  w: WEST,
+  quit: QUIT,
+  look: LOOK,
+  "look around": LOOK,
+  scan: SCAN,
+  enter: ENTER,
+  "climb rope": CLIMB_ROPE,
+  debug: DEBUG # remove me ree!
 }.freeze
 
 
-def move_player(dirshort, dirlong)
+def move_player(dirshort)
   if @game.move_player(dirshort)
-    puts("You moved #{dirlong}!")
+    puts("You moved #{dirshort}!")
     puts(@game.get_player_room())
   else
     puts('You can\'t move that way!')
@@ -30,40 +45,40 @@ end
 
 def run_command(input)
   if not input
-    input = COMMANDS[:quit]
+    input = QUIT
   end
-  case input.downcase.strip
+  case COMMANDS[input.downcase.strip.to_sym]
   when ""
     return
-  when COMMANDS[:north]
-    move_player(COMMANDS[:north], 'north')
-  when COMMANDS[:east]
-    move_player(COMMANDS[:east], 'east')
-  when COMMANDS[:south]
-    move_player(COMMANDS[:south], 'south')
-  when COMMANDS[:west]
-    move_player(COMMANDS[:west], 'west')
-  when COMMANDS[:look]
+  when NORTH
+    move_player(NORTH)
+  when EAST
+    move_player(EAST)
+  when SOUTH
+    move_player(SOUTH)
+  when WEST
+    move_player(WEST)
+  when LOOK
     @game.player_look()
-  when COMMANDS[:climbrope]
+  when CLIMB_ROPE
     if @game.climb_rope()
       puts("You climb the rope back up to #{@game.get_player_room()}")
     else
       puts("There's no rope here to climb")
     end
-  when COMMANDS[:enter]
+  when ENTER
     if @game.enter_dungeon()
       puts("You entered a new dungeon!")
       puts(@game.get_player_room())
     else
       puts("You can't enter a dungeon here")
     end
-  when COMMANDS[:debug]
+  when DEBUG
     puts("Entering debug mode, use 'pw' to print the world")
     byebug
-  when COMMANDS[:scan]
+  when SCAN
     scan()
-  when COMMANDS[:quit]
+  when QUIT
     puts('Quitting the game...')
     exit
   else
