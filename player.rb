@@ -45,15 +45,4 @@ class Player
     "#{s}\n"
   end
 
-  def scan(adj)
-    s = ''
-    #byebug
-    # roll dice related to some future perception check, you see a "room.name"
-    s += "North of you, you see: #{adj[:north].name}\n" if adj[:north]
-    s += "To the east, you see: #{adj[:east].name}\n" if adj[:east]
-    s += "Towards the south, you see: #{adj[:south].name}\n" if adj[:south]
-    s += "As you look westward, you see: #{adj[:west].name}\n" if adj[:west]
-    "#{s}\n"
-  end
-
 end
