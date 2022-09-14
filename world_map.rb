@@ -102,13 +102,13 @@ class WorldMap
 
     last_dir = nil
     next_dir = nil
-    dirs = [:north, :south, :east, :west]
+
     dungeon.each_with_index do |room, di|
       if di > 0
-        next_dir = dirs[Random.rand(dirs.length)]
+        next_dir = DIRS.sample
         if last_dir
           while next_dir == OPPOSITE[last_dir]
-            next_dir = dirs[Random.rand(dirs.length)]
+            next_dir = DIRS.sample
           end
         end
         i = start_index + di

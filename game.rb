@@ -37,6 +37,13 @@ OPPOSITE = {
   west: :east
 }
 
+DIRS = %i[
+  north
+  south
+  east
+  west
+].freeze
+
 def move_player(dirshort, dirlong)
   if @world_map.can_move_from_to(@player.location, dirshort)
     @player.move_player(@world_map.move_from_to(@player.location, dirshort))
