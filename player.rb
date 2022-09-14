@@ -1,32 +1,35 @@
 require 'byebug'
 
 class Player
-  attr_accessor :name, :location
+  attr_accessor :name, :location, :instance, :str, :dex, :int
 
   def initialize(name = nil, location = 0, str = 15, dex = 15, int = 15)
     @name = name
     @location = location
+    @instance = 0
+    @overworld = nil
     @str = str
     @dex = dex
     @int = int
-    @overworld = nil
   end
 
-  def enter_dungeon(newroom)
+  def enter_instance(instance)
     @overworld = @location
-    move_player(newroom)
+    @instance = instance
+    move_player(0)
   end
 
-  def leave_dungeon
+  def leave_instance
     if @overworld == nil
-      puts("There's no dungeon to exit")
+      puts("There's no instance to exit")
     elsif
       move_player(@overworld)
       @overworld = nil
+      @instance = 0
     end
   end
 
-  def is_in_dungeon
+  def is_in_instance
     @overworld != nil
   end
 

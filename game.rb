@@ -46,10 +46,10 @@ DIRS = %i[
 ].freeze
 
 def move_player(dirshort, dirlong)
-  if @world_map.can_move_from_to(@player.location, dirshort)
-    @player.move_player(@world_map.move_from_to(@player.location, dirshort))
+  if @world_map.can_move_from_to(@player.instance, @player.location, dirshort)
+    @player.move_player(@world_map.move_from_to(@player.instance, @player.location, dirshort))
     puts("You moved #{dirlong}!")
-    puts(@world_map.get_room(@player.location))
+    puts(@world_map.get_room(@player.instance, @player.location))
   else
     puts('You can\'t move that way!')
   end
@@ -71,26 +71,27 @@ def run_command(input)
   when COMMANDS[:west]
     move_player(COMMANDS[:west], 'west')
   when COMMANDS[:look]
-    @player.look(@world_map.get_room(@player.location))
+    @player.look(@world_map.get_room(@player.instance, @player.location))
   when COMMANDS[:climbrope]
-    if ["Dungeon Entrance", "Dungeon Vault"].include? @world_map.get_room(@player.location).name
-      @player.leave_dungeon
-      puts("You climb the rope back up to #{@world_map.get_room(@player.location).name}")
+    if ["Dungeon Entrance", "Dungeon Vault"].include? @world_map.get_room(@player.instance, @player.location).name
+      @player.leave_instance
+      puts("You climb the rope back up to #{@world_map.get_room(@player.instance, @player.location).name}")
     else
       puts("You're not in a dungeon entrance or exit.")
     end
   when COMMANDS[:enter]
-    if @player.is_in_dungeon
+    if @player.is_in_instance
       puts("You're already in a dungeon!")
     else
-      @player.enter_dungeon(@world_map.build_dungeon(5, 0))
+      @player.enter_instance(@world_map.build_dungeon(5, 0))
       puts("You entered a new dungeon!")
+      puts(@world_map.get_room(@player.instance, @player.location))
     end
   when COMMANDS[:debug]
     puts("Entering debug mode, use 'pw' to print the world")
     byebug
   when COMMANDS[:scan]
-    @player.scan(@world_map.adjacent_rooms(@player.location))
+    @player.scan(@world_map.adjacent_rooms(@player.instance, @player.location))
   when COMMANDS[:quit]
     puts('Quitting the game...')
     exit
@@ -103,7 +104,7 @@ end
 def start_game
   input = ''
   output = ''
-  s = "Welcome, #{@player.name}. What would you like to do? You're in #{@world_map.get_room(@player.location)}"
+  s = "Welcome, #{@player.name}. What would you like to do? You're in #{@world_map.get_room(@player.instance, @player.location)}"
   puts(s)
   loop do
     print("> ")
