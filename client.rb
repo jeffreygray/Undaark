@@ -56,12 +56,15 @@ def run_command(input)
   if not input
     input = QUIT
   end
-  inputArr = input.split(" ")
-  case COMMANDS[inputArr[0].downcase.strip.to_sym]
+  inputArr = input.downcase.split(" ")
+  if inputArr.length == 0 
+      return
+  end
+  case COMMANDS[inputArr[0].strip.to_sym]
   when ""
     return
   when ATTACK
-    if inputArr.length() != 3
+    if inputArr.length != 3
       puts("You must choose an enemy and an attack! That is all!")
     elsif !@game.get_player_room().has_enemy(inputArr[1])
       puts("A #{inputArr[1]} is not present!")

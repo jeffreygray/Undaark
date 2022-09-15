@@ -21,9 +21,9 @@
 require_relative 'room'
 require_relative 'things/player'
 require_relative 'things/enemy'
+require_relative 'things/rope'
 require_relative 'world_map'
 require_relative 'generators/room'
-require_relative 'things/thing'
 require_relative 'quicksand_room'
 require 'byebug'
 
@@ -93,14 +93,8 @@ class Game
   end
 
   def perform_attack(enemy_name, attack)
-    enemy = nil
     result = 0
-    get_player_room.objects.each do |object|
-        if object.is_a? Enemy and object.name == enemy_name
-            enemy = object
-            break
-        end
-    end
+    enemy = get_player_room.get_enemy enemy_name
     case attack
     when 'club'
         case enemy.attack

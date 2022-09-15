@@ -22,7 +22,7 @@ class Enemy < Thing
     PAPER_FLAVOR = [
         "The #\'s face is as blank as a page",
         "The # looks ready to jump into the fold!",
-        "Beward the tearable nature of the #"
+        "Beware the tearable nature of the #"
     ].freeze
 
     def initialize(params)
@@ -30,6 +30,10 @@ class Enemy < Thing
         @location = params[:location] || 0
         @instance = params[:instance] || 0
         @combat_preference = params[:combat_preference] || ROCK
+    end
+
+    def fights?
+        true
     end
 
     def attack

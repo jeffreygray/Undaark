@@ -17,23 +17,20 @@ class Room
   end
 
   def has_combat
-    combat = false
-    objects.each do |object|
-      if object.is_a?(Enemy)
-        combat = true
-      end
-    end
-    combat
+    objects.any? { |o| o.fights? }
   end
   
   def has_enemy(enemy_name)
-    enemy_exists = false
-    objects.each do |object|
-      if object.is_a?(Enemy) and object.name == enemy_name
-          enemy_exists = true
+    objects.any? { |o| o.fights? and o.name.downcase == enemy_name.downcase }
+  end
+
+  def get_enemy(enemy_name)
+      objects.each do |object|
+          if object.fights? and object.name.downcase == enemy_name.downcase
+              return object
+          end
       end
-    end
-    enemy_exists
+      return nil
   end
 
   # making this method instead of having [exits] in initializer since we build exits in world_map

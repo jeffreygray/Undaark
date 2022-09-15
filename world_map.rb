@@ -97,7 +97,8 @@ class WorldMap
           enemies = ['Goblin', 'Kobold', 'Ghast', 'Skeleton', 'Newt', 'Giant-Rat']
           enemy = enemies[random.rand(enemies.length)]
           params = {
-            name: enemy
+            name: enemy,
+            combat_preference: ['rock','paper','scissors'][rand(0..2)]
           }
           dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [Enemy.new(params)]))
         end
@@ -105,7 +106,7 @@ class WorldMap
       end
     end
 
-    vault = Room.new('Dungeon Vault', 'There\'s nothing here', -1, -1, -1, -1, ['Rope'])
+    vault = Room.new('Dungeon Vault', 'There\'s nothing here', -1, -1, -1, -1, [Rope.new({ name: 'rope' })])
     dungeon.append(vault)
 
     instance = add_instance(create_path(dungeon, random))

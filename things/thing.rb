@@ -5,4 +5,12 @@ class Thing
         @name = params[:name] 
         @description = params[:description] || ""
     end
+
+    def fights?
+        false
+    end
+
+    def climbable?
+        false
+    end
 end
