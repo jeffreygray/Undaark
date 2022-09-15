@@ -3,9 +3,17 @@
 # TODO:
 
 # Nightmare event randomly during game tic?
-
-# room traps , doors getting shut, doors locked will have the -2 added
-# quicksand, try to leave a few times before you  get out
+#
+# implement puzzle room
+#
+# player equipment
+# after things:
+  # dungeon vaults
+  # combat
+    # health
+#
+# client/server
+# multiple players
 
 require_relative 'room'
 require_relative 'player'
