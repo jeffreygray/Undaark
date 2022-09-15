@@ -25,6 +25,7 @@ module Generators
   ].freeze
 
   THING_ADJECTIVES = %w[
+    decrepit
     whistling
     diseased
     skeletal

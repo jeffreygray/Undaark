@@ -35,11 +35,12 @@ COMMANDS = { # constant-ish (frozen hash)
 
 
 def move_player(dirshort)
-  if @game.move_player(dirshort)
+  result = @game.move_player(dirshort)
+  if result[0]
     puts("You moved #{dirshort}!")
     puts(@game.get_player_room())
   else
-    puts('You can\'t move that way!')
+    puts(result[1])
   end
 end
 
