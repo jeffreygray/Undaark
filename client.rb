@@ -57,6 +57,9 @@ def run_command(input)
     input = QUIT
   end
   inputArr = input.split(" ")
+  if inputArr.length == 0
+    return
+  end
   case COMMANDS[inputArr[0].downcase.strip.to_sym]
   when ""
     return
