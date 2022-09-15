@@ -1,8 +1,8 @@
 
 class Room
-  attr_accessor :name, :desc, :north, :east, :south, :west, :objects
+  attr_accessor :name, :desc, :north, :east, :south, :west, :objects, :enemies
 
-  def initialize(name = 'The Void', desc = "There's nothing here!", north = -1, east = -1, south = -1, west = -1, objects = [])
+  def initialize(name = 'The Void', desc = "There's nothing here!", north = -1, east = -1, south = -1, west = -1, objects = [], enemies = [])
     @name = name
     @desc = desc
     @north = north
@@ -14,6 +14,26 @@ class Room
 
   def is_locked
     false
+  end
+
+  def has_combat
+    combat = false
+    objects.each do |object|
+      if object.is_a?(Enemy)
+        combat = true
+      end
+    end
+    combat
+  end
+  
+  def has_enemy(enemy_name)
+    enemy_exists = false
+    objects.each do |object|
+      if object.is_a?(Enemy) and object.name == enemy_name
+          enemy_exists = true
+      end
+    end
+    enemy_exists
   end
 
   # making this method instead of having [exits] in initializer since we build exits in world_map

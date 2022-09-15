@@ -3,6 +3,6 @@ class Thing
 
     def initialize(params)
         @name = params[:name] 
-        @description = params[:description]
+        @description = params[:description] || ""
     end
 end

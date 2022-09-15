@@ -30,7 +30,7 @@ class WorldMap
   end
 
   def can_move_from_to(instance, location, dir)
-    move_from_to(instance, location, dir) != -1 and !get_room(instance, location).is_locked
+      move_from_to(instance, location, dir) != -1 and !get_room(instance, location).is_locked and !get_room(instance, location).has_combat
   end
 
   def adjacent_rooms(instance, location)
@@ -61,9 +61,9 @@ class WorldMap
         when :entrance
           next_room = :corridor
         when :corridor
-          if random.rand < 0.4
+            if random.rand < 0.1   #Original .4
             next_room = :corridor
-          elsif random.rand < 0.5
+            elsif random.rand < 0.8   #Original .5
             next_room = :mob
           else
             next_room = :trap
@@ -94,9 +94,12 @@ class WorldMap
             dungeon.append(Room.new('Puzzle Room', 'idk figure it out'))
           end
         when :mob
-          enemies = ['Goblin', 'Kobold', 'Ghast', 'Skeleton', 'Newt', 'Giant Rat']
+          enemies = ['Goblin', 'Kobold', 'Ghast', 'Skeleton', 'Newt', 'Giant-Rat']
           enemy = enemies[random.rand(enemies.length)]
-          dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [enemy]))
+          params = {
+            name: enemy
+          }
+          dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [Enemy.new(params)]))
         end
         last_room = next_room
       end

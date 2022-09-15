@@ -20,6 +20,7 @@
 
 require_relative 'room'
 require_relative 'things/player'
+require_relative 'things/enemy'
 require_relative 'world_map'
 require_relative 'generators/room'
 require_relative 'things/thing'
@@ -68,7 +69,9 @@ class Game
       @player.struggle_attempts = 0
       [true]
     else
-      if get_player_room.is_a? QuicksandRoom
+      if get_player_room.has_combat
+          [false, "you try to leave but evil blocks your path!"]
+      elsif get_player_room.is_a? QuicksandRoom
         if get_player_room.is_locked
           @player.struggle_attempts += 1
           [false, "You try to move but you're stuck in quicksand!"]
@@ -88,6 +91,55 @@ class Game
   def player_look
     @player.look(get_player_room)
   end
+
+  def perform_attack(enemy_name, attack)
+    enemy = nil
+    result = 0
+    get_player_room.objects.each do |object|
+        if object.is_a? Enemy and object.name == enemy_name
+            enemy = object
+            break
+        end
+    end
+    case attack
+    when 'club'
+        case enemy.attack
+        when 'rock'
+            result = 0 #tie
+        when 'paper'
+            result = -1 #loss
+        when 'scissors'
+            result = 1 #win
+        end
+    when 'slice'
+        case enemy.attack
+        when 'rock'
+            result = -1 #loss
+        when 'paper'
+            result = 1 #win
+        when 'scissors'
+            result = 0 #Tie
+        end
+    when 'cover'
+        case enemy.attack
+        when 'rock'
+            result = 1 #win
+        when 'paper'
+            result = 0 #tie
+        when 'scissors'
+            result = -1 #loss
+        end
+    end
+    if result == 1
+        get_player_room.objects.delete(enemy)
+        puts("#{@player.name} #{attack}s the enemy #{enemy.name}... the #{enemy.name} is defeated!")
+    elsif result == -1
+        puts("#{@player.name} falls to the enemy #{enemy.name}'s attack!")
+    else
+        puts("#{@player.name} clashes with the #{enemy.name} but the fight continues!")
+    end
+  end
+
 
   def climb_rope
     if ["Dungeon Entrance", "Dungeon Vault"].include? get_player_room.name

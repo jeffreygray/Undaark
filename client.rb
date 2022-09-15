@@ -13,7 +13,9 @@ LOOK = 'look';
 SCAN = 'scan';
 ENTER = 'enter';
 CLIMB_ROPE = 'climb-rope';
+ATTACK = 'attack';
 DEBUG = 'debug';
+
 
 COMMANDS = { # constant-ish (frozen hash)
   north: NORTH,
@@ -29,7 +31,9 @@ COMMANDS = { # constant-ish (frozen hash)
   "look around": LOOK,
   scan: SCAN,
   enter: ENTER,
+  climb: CLIMB_ROPE,
   "climb rope": CLIMB_ROPE,
+  attack: ATTACK,
   debug: DEBUG # remove me ree!
 }.freeze
 
@@ -44,13 +48,28 @@ def move_player(dirshort)
   end
 end
 
+def is_valid_attack(attack)
+    return ['club', 'slice', 'cover'].include? attack
+end
+
 def run_command(input)
   if not input
     input = QUIT
   end
-  case COMMANDS[input.downcase.strip.to_sym]
+  inputArr = input.split(" ")
+  case COMMANDS[inputArr[0].downcase.strip.to_sym]
   when ""
     return
+  when ATTACK
+    if inputArr.length() != 3
+      puts("You must choose an enemy and an attack! That is all!")
+    elsif !@game.get_player_room().has_enemy(inputArr[1])
+      puts("A #{inputArr[1]} is not present!")
+    elsif !is_valid_attack(inputArr[2])
+      puts("You may only club, slice, or cover your opponent!")
+    else
+        @game.perform_attack(inputArr[1], inputArr[2])
+    end
   when NORTH
     move_player(NORTH)
   when EAST
