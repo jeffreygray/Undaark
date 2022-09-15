@@ -63,7 +63,7 @@ def run_command(input)
     @game.player_look()
   when CLIMB_ROPE
     if @game.climb_rope()
-      puts("You climb the rope back up to #{@game.get_player_room()}")
+      puts("You climb the rope back up to the #{@game.get_player_room()}")
     else
       puts("There's no rope here to climb")
     end
