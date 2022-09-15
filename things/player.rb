@@ -2,7 +2,7 @@ require 'byebug'
 require_relative 'thing'
 
 class Player < Thing
-  attr_accessor :location, :instance, :str, :dex, :int
+  attr_accessor :location, :instance, :str, :dex, :int, :struggle_attempts
 
   def initialize(params)
     super # TODO: for Jeff, find out why this works and isn't in byebug/pry
@@ -12,6 +12,7 @@ class Player < Thing
     @str = params[:str]
     @dex = params[:dex]
     @int = params[:int]
+    @struggle_attempts = 0
   end
 
   def enter_instance(instance)
@@ -40,10 +41,19 @@ class Player < Thing
 
   def look(room)
     s = "In a #{room.name}, you see:\n\n"
+    saw_something = false
     room.objects.each do |object| # Note: iterating
+      if object == self
+        next
+      end
+      saw_something = true
       s += "#{object}\n"
     end
-    "#{s}\n"
+    if saw_something
+      "#{s}\n"
+    else
+      "#{s}Nothing\n\n"
+    end
   end
 
 end

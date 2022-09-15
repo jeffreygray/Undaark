@@ -30,7 +30,7 @@ class WorldMap
   end
 
   def can_move_from_to(instance, location, dir)
-    !get_room(instance, location).is_locked and move_from_to(instance, location, dir) != -1
+    move_from_to(instance, location, dir) != -1 and !get_room(instance, location).is_locked
   end
 
   def adjacent_rooms(instance, location)
@@ -87,7 +87,7 @@ class WorldMap
           end
         when :trap
           if random.rand(3) < 1
-            dungeon.append(Room.new('Quicksand', 'AAAAAAAAAAAAAAAAAAAAA'))
+            dungeon.append(QuicksandRoom.new('Quicksand', 'AAAAAAAAAAAAAAAAAAAAA'))
           elsif random.rand < 0.5
             dungeon.append(Room.new('Innocent-Looking Room', 'It\'s just a room'))
           else
