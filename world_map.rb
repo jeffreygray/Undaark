@@ -30,7 +30,7 @@ class WorldMap
   end
 
   def can_move_from_to(instance, location, dir)
-    move_from_to(instance, location, dir) != -1
+    !get_room(instance, location).is_locked and move_from_to(instance, location, dir) != -1
   end
 
   def adjacent_rooms(instance, location)
