@@ -12,6 +12,10 @@ class Room
     @objects = objects
   end
 
+  def is_locked
+    false
+  end
+
   # making this method instead of having [exits] in initializer since we build exits in world_map
   # TODO: Uncomment this or delete 
     # We might keep this or just use adjacent rooms

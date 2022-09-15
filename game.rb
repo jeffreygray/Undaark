@@ -2,9 +2,7 @@
 
 # TODO:
 
-# initialize random number generator with seed
 # Nightmare event randomly during game tic?
-# Reconsider Input handling part of the player class instead of in game?
 
 # room traps , doors getting shut, doors locked will have the -2 added
 # quicksand, try to leave a few times before you  get out
@@ -31,6 +29,8 @@ DIRS = %i[
 ].freeze
 
 class Game
+
+  attr_accessor :player, :world_map
 
   def initialize()
     @player = Player.new('Adventurer', 0, 15, 15, 15)
@@ -64,12 +64,16 @@ class Game
     end
   end
 
-  def enter_dungeon
+  def enter_dungeon(seed = nil)
     if @player.is_in_instance
       # already in a dungeon
       false
     else
-      @player.enter_instance(@world_map.build_dungeon(5, 0))
+      if seed == nil
+        @player.enter_instance(@world_map.build_dungeon(5))
+      else
+        @player.enter_instance(@world_map.build_dungeon(5, seed))
+      end
     end
   end
 

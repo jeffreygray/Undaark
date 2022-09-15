@@ -1,0 +1,8 @@
+Things:
+    item
+    player
+    monster
+    anything you can interact with in the room
+        rope
+        chest
+
