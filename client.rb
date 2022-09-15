@@ -103,7 +103,7 @@ def start_game
   name = 'Adventurer'
   input = ''
   output = ''
-  s = "Welcome, #{name}. What would you like to do? You're in #{@game.get_player_room}"
+  s = "Welcome, #{name}. What would you like to do? You're in a #{@game.get_player_room}" #Sara says we should look at how we handle the grammar of this one. Should (a) be in the room generator?
   puts(s)
   loop do
     print("> ")
