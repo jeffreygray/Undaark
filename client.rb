@@ -104,7 +104,13 @@ def start_game
   name = 'Adventurer'
   input = ''
   output = ''
-  s = "Welcome, #{name}. What would you like to do? You're in a #{@game.get_player_room}" #Sara says we should look at how we handle the grammar of this one. Should (a) be in the room generator?
+  location = @game.get_player_room
+  if 'aeiou'.include? "#{location}".downcase[0]
+    location = "an #{location}"
+  else
+    location = "a #{location}"
+  end
+  s = "Welcome, #{name}. What would you like to do? You're in #{location}" #Sara says we should look at how we handle the grammar of this one. Should (a) be in the room generator?
   puts(s)
   loop do
     print("> ")
