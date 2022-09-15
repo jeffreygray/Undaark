@@ -1,6 +1,7 @@
 require 'byebug'
+require_relative 'thing'
 
-class Player
+class Player < Thing
   attr_accessor :name, :location, :instance, :str, :dex, :int
 
   def initialize(name = nil, location = 0, str = 15, dex = 15, int = 15)
@@ -30,7 +31,7 @@ class Player
   end
 
   def is_in_instance
-    @overworld != nil
+      @overworld != nil
   end
 
   def move_player(newroom)

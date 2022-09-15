@@ -10,7 +10,7 @@
 # quicksand, try to leave a few times before you  get out
 
 require_relative 'room'
-require_relative 'player'
+require_relative 'things/player'
 require_relative 'world_map'
 require_relative 'generators/room'
 require 'byebug'
