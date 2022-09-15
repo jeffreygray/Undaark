@@ -1,16 +1,20 @@
 #!/usr/bin/env ruby
 
+# Change to server 
+
 # TODO:
 
+# quicksand, try to leave a few times before you  get out
+# room traps , doors getting shut, doors locked will have the -2 added
+# Make look show desc from thing
 # Nightmare event randomly during game tic?
 
-# room traps , doors getting shut, doors locked will have the -2 added
-# quicksand, try to leave a few times before you  get out
 
 require_relative 'room'
 require_relative 'things/player'
 require_relative 'world_map'
 require_relative 'generators/room'
+require_relative 'things/thing'
 require 'byebug'
 
 
@@ -33,8 +37,17 @@ class Game
   attr_accessor :player, :world_map
 
   def initialize()
-    @player = Player.new('Adventurer', 0, 15, 15, 15)
-    @goblin = Player.new('Goblin', 1, 15, 15, 15)
+    # thing:   name = nil, description = nil)
+    # player: location = 0, str = 15, dex = 15, int = 15)
+    player_params = {
+      name: 'Adventurer',
+      location: 0,
+      str: 15,
+      dex: 15,
+      int: 15
+    }.freeze
+    @player = Player.new(player_params)
+   # @goblin = Player.new('Goblin', 1, 15, 15, 15)
     @world_map = WorldMap.new
   end
 

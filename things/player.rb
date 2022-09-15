@@ -2,36 +2,36 @@ require 'byebug'
 require_relative 'thing'
 
 class Player < Thing
-  attr_accessor :name, :location, :instance, :str, :dex, :int
+  attr_accessor :location, :instance, :str, :dex, :int
 
-  def initialize(name = nil, location = 0, str = 15, dex = 15, int = 15)
-    @name = name
-    @location = location
-    @instance = 0
-    @overworld = nil
-    @str = str
-    @dex = dex
-    @int = int
+  def initialize(params)
+    super # TODO: for Jeff, find out why this works and isn't in byebug/pry
+    @location = params[:location] || 0
+    @instance = params[:instance] || 0
+    @return_location = params[:return_location] || nil
+    @str = params[:str]
+    @dex = params[:dex]
+    @int = params[:int]
   end
 
   def enter_instance(instance)
-    @overworld = @location
+    @return_location = @location
     @instance = instance
     move_player(0)
   end
 
   def leave_instance
-    if @overworld == nil
+    if @return_location == nil
       puts("There's no instance to exit")
     elsif
-      move_player(@overworld)
-      @overworld = nil
+      move_player(@return_location)
+      @return_location = nil
       @instance = 0
     end
   end
 
   def is_in_instance
-      @overworld != nil
+      @return_location != nil
   end
 
   def move_player(newroom)
