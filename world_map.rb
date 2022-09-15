@@ -43,27 +43,33 @@ class WorldMap
     }
   end
 
-  def build_dungeon(difficulty, seed)
+  def build_dungeon(difficulty, seed = nil)
+    if seed == nil
+      random = Random.new
+    else
+      random = Random.new seed
+    end
+
     entrance = Room.new('Dungeon Entrance', 'A rope descending down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
     dungeon = [entrance]
     last_room = :entrance
 
     (1+2*difficulty).times do
-      if Random.rand < 0.5
+      if random.rand < 0.5
         # new room Markov chain
         case last_room
         when :entrance
           next_room = :corridor
         when :corridor
-          if Random.rand < 0.4
+          if random.rand < 0.4
             next_room = :corridor
-          elsif Random.rand < 0.5
+          elsif random.rand < 0.5
             next_room = :mob
           else
             next_room = :trap
           end
         when :mob
-          if Random.rand < 0.3
+          if random.rand < 0.3
             next_room = :mob
           else
             next_room = :corridor
@@ -74,22 +80,22 @@ class WorldMap
 
         case next_room
         when :corridor
-          if Random.rand < 0.5
+          if random.rand < 0.5
             dungeon.append(Room.new('Dungeon Corridor', 'An eerie corridor lined with torches and cobwebs'))
           else
             dungeon.append(Room.new('Dungeon Corridor', 'A dusty path'))
           end
         when :trap
-          if Random.rand(3) < 1
+          if random.rand(3) < 1
             dungeon.append(Room.new('Quicksand', 'AAAAAAAAAAAAAAAAAAAAA'))
-          elsif Random.rand < 0.5
+          elsif random.rand < 0.5
             dungeon.append(Room.new('Innocent-Looking Room', 'It\'s just a room'))
           else
             dungeon.append(Room.new('Puzzle Room', 'idk figure it out'))
           end
         when :mob
           enemies = ['Goblin', 'Kobold', 'Ghast', 'Skeleton', 'Newt', 'Giant Rat']
-          enemy = enemies[Random.rand(enemies.length)]
+          enemy = enemies[random.rand(enemies.length)]
           dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [enemy]))
         end
         last_room = next_room
@@ -99,16 +105,21 @@ class WorldMap
     vault = Room.new('Dungeon Vault', 'There\'s nothing here', -1, -1, -1, -1, ['Rope'])
     dungeon.append(vault)
 
-    instance = add_instance(create_path(dungeon))
+    instance = add_instance(create_path(dungeon, random))
   end
 
-  def create_path(rooms)
+  def create_path(rooms, random=nil)
+    if random == nil
+      random = Random.new
+    end
     last_dir = nil
     (rooms.count-1).times do |i|
-      next_dir = DIRS.sample
+      # next_dir = DIRS.sample  # how to sample using random?
+      next_dir = DIRS[random.rand(DIRS.length)]
       if last_dir
         while next_dir == OPPOSITE[last_dir]
-          next_dir = DIRS.sample
+          # next_dir = DIRS.sample
+          next_dir = DIRS[random.rand(DIRS.length)]
         end
       end
       rooms[i].send("#{COMMANDS[next_dir]}=", i+1)

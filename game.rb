@@ -2,7 +2,6 @@
 
 # TODO:
 
-# initialize random number generator with seed
 # Nightmare event randomly during game tic?
 # Reconsider Input handling part of the player class instead of in game?
 
@@ -31,6 +30,8 @@ DIRS = %i[
 ].freeze
 
 class Game
+
+  attr_accessor :player, :world_map
 
   def initialize()
     @player = Player.new('Adventurer', 0, 15, 15, 15)
