@@ -71,7 +71,12 @@ def run_command(input)
     elsif !is_valid_attack(inputArr[2])
       puts("You may only club, slice, or cover your opponent!")
     else
-        @game.perform_attack(inputArr[1], inputArr[2])
+      resp = @game.perform_attack(inputArr[1], inputArr[2])
+      if resp[0]
+        puts(resp[1])
+      else
+        puts("Error: #{resp[1]}")
+      end
     end
   when NORTH
     move_player(NORTH)

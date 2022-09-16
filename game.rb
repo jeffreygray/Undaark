@@ -94,45 +94,42 @@ class Game
 
   def perform_attack(enemy_name, attack)
     result = 0
-    enemy = get_player_room.get_enemy enemy_name
-    case attack
-    when 'club'
-        case enemy.attack
-        when 'rock'
-            result = 0 #tie
-        when 'paper'
-            result = -1 #loss
-        when 'scissors'
-            result = 1 #win
-        end
-    when 'slice'
-        case enemy.attack
-        when 'rock'
-            result = -1 #loss
-        when 'paper'
-            result = 1 #win
-        when 'scissors'
-            result = 0 #Tie
-        end
-    when 'cover'
-        case enemy.attack
-        when 'rock'
-            result = 1 #win
-        when 'paper'
-            result = 0 #tie
-        when 'scissors'
-            result = -1 #loss
-        end
+    atk_conv = {
+      club: 'rock',
+      slice: 'scissors',
+      cover: 'paper'
+    }
+    if not atk_conv.include? attack.to_sym
+      return [false, "invalid attack option"]
     end
+    player_rps = atk_conv[attack.to_sym]
+
+    enemy = get_player_room.get_enemy enemy_name
+    if enemy == nil
+      return [false, "no #{enemy_name} enemy present"]
+    end
+
+    adv = {
+      rock: 'scissors',
+      scissors: 'paper',
+      paper: 'rock'
+    }
+    if adv[player_rps.to_sym] == enemy.attack
+      result = 1  # win
+    elsif adv[enemy.attack.to_sym] == player_rps
+      result = -1 # loss
+    end
+    msg = ""
     if result == 1
         get_player_room.objects.delete(enemy)
-        get_player_room.desc += ", stone cold dead"
-        puts("#{@player.name} #{attack}s the enemy #{enemy.name}... the #{enemy.name} is defeated!")
+        get_player_room.desc += ", stone-cold dead"
+        msg = "#{@player.name} #{attack}s the enemy #{enemy.name}... the #{enemy.name} is defeated!"
     elsif result == -1
-        puts("#{@player.name} falls to the enemy #{enemy.name}'s attack!")
+        msg = "#{@player.name} falls to the enemy #{enemy.name}'s attack!"
     else
-        puts("#{@player.name} clashes with the #{enemy.name} but the fight continues!")
+        msg = "#{@player.name} clashes with the #{enemy.name} but the fight continues!"
     end
+    [true, msg]
   end
 
 
