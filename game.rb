@@ -126,6 +126,7 @@ class Game
     end
     if result == 1
         get_player_room.objects.delete(enemy)
+        get_player_room.desc += ", stone cold dead"
         puts("#{@player.name} #{attack}s the enemy #{enemy.name}... the #{enemy.name} is defeated!")
     elsif result == -1
         puts("#{@player.name} falls to the enemy #{enemy.name}'s attack!")
