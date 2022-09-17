@@ -1,0 +1,434 @@
+require:
+  - rubocop-rspec
+  - rubocop-performance
+
+AllCops:
+  Exclude:
+    - "db/**/*"
+    - "tmp/**/*"
+    - "bin/**/*"
+    - "config/**/*"
+    - "schemas/**/*"
+    - "metadata/**/*"
+    - "node_modules/**/*"
+    - "lib/tasks/*"
+    - "Guardfile"
+    - "Rakefile"
+
+
+# --- Security settings
+
+Security:
+  Enabled: true
+
+# --- Naming settings
+
+Naming/RescuedExceptionsVariableName:
+  PreferredName: exception
+
+# --- Style settings
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
+Style/SymbolArray:
+  Enabled: true
+
+Style/HashSyntax:
+  EnforcedStyle: no_mixed_keys
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+# A specialized exception class will take one or more arguments and construct the message from it.
+# So both variants make sense.
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+# Fail is an alias of raise. Avoid aliases, it's more cognitive load for no gain.
+# The argument that fail should be used to abort the program is wrong too,
+# there's Kernel#abort for that.
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+# do / end blocks should be used for side effects,
+# methods that run a block for side effects and have
+# a useful return value are rare, assign the return
+# value to a local variable for those cases.
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+
+# TODO: Enforce Style/FrozenStringLiteralComment
+# Disable enforcing frozen_string_literal: true (for Ruby 3.0 compat)
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+# TODO: Enforce Style/RedundantReturn excluding controllers
+Style/RedundantReturn:
+  Enabled: false
+
+# Enforce explicit begin/rescue blocks
+Style/RedundantBegin:
+  Enabled: false
+
+# TODO: Enforce Style/ClosingParenthesisIndentation
+# Style/ClosingParenthesisIndentation:
+# Enabled: false
+
+Style/RedundantSelf:
+  Enabled: false
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+# Allows braces for multi line blocks if chaining
+Style/BlockDelimiters:
+  EnforcedStyle: braces_for_chaining
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/HashEachMethods:
+  Enabled: false
+
+# should be enabled for Ruby 2.5
+Style/HashTransformKeys:
+  Enabled: false
+
+# should be ebabled for Ruby 2.4
+Style/HashTransformValues:
+  Enabled: false
+
+# --- Layout settings
+
+Layout/LineLength:
+  Max: 120
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Layout/HashAlignment:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+  IndentOneStep: true
+
+# Enforce empty lines around begin/end blocks
+Layout/EmptyLinesAroundBeginBody:
+  Enabled: false
+
+# Enforce empty lines around block bodies
+Layout/EmptyLinesAroundBlockBody:
+  Enabled: false
+
+# Enforce empty lines inside class definitions
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines_except_namespace
+
+# Enforce empty lines inside module definition
+Layout/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines_except_namespace
+
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+
+Layout/MultilineArrayBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineHashBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodCallBraceLayout:
+  EnforcedStyle: new_line
+
+Layout/MultilineMethodDefinitionBraceLayout:
+  EnforcedStyle: new_line
+
+# --- Lint settings
+
+# Suppressing exceptions can be perfectly fine, and be it to avoid to
+# explicitly type nil into the rescue since that's what you want to return,
+# or suppressing LoadError for optional dependencies
+Lint/SuppressedException:
+  Enabled: false
+
+Lint/InheritException:
+  EnforcedStyle: standard_error
+
+# --- Metrics settings
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  AllowedMethods: ["describe", "context", "define", "factory", "namespace"]
+  CountAsOne: ["array", "hash", "heredoc"]
+
+Metrics/PerceivedComplexity:
+  Max: 10
+
+Metrics/CyclomaticComplexity:
+  Max: 8
+
+# Too short methods lead to extraction of single-use methods, which can make
+# the code easier to read (by naming things), but can also clutter the class
+Metrics/MethodLength:
+  Max: 35
+  CountAsOne: ["array", "hash", "heredoc"]
+
+# The guiding principle of classes is SRP, SRP can't be accurately measured by LoC
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/ModuleLength:
+  CountAsOne: ["array", "hash", "heredoc"]
+
+# --- Bundler settings
+
+# Don't care about ordering gems alphabetically
+Bundler/OrderedGems:
+  Enabled: false
+
+# New cops added that need defaults
+Layout/BeginEndAlignment: # (new in 0.91)
+  Enabled: true
+
+Layout/EmptyLinesAroundAttributeAccessor: # (new in 0.83)
+  Enabled: true
+
+Layout/SpaceAroundMethodCallOperator: # (new in 0.82)
+  Enabled: true
+
+Lint/BinaryOperatorWithIdenticalOperands: # (new in 0.89)
+  Enabled: true
+
+Lint/ConstantDefinitionInBlock: # (new in 0.91)
+  Enabled: true
+
+Lint/DeprecatedOpenSSLConstant: # (new in 0.84)
+  Enabled: true
+
+Lint/DuplicateElsifCondition: # (new in 0.88)
+  Enabled: true
+
+Lint/DuplicateRequire: # (new in 0.90)
+  Enabled: true
+
+Lint/DuplicateRescueException: # (new in 0.89)
+  Enabled: true
+
+Lint/EmptyConditionalBody: # (new in 0.89)
+  Enabled: true
+
+Lint/EmptyFile: # (new in 0.90)
+  Enabled: true
+
+Lint/FloatComparison: # (new in 0.89)
+  Enabled: true
+
+Lint/HashCompareByIdentity: # (new in 0.93)
+  Enabled: true
+
+Lint/IdentityComparison: # (new in 0.91)
+  Enabled: true
+
+Lint/MissingSuper: # (new in 0.89)
+  Enabled: true
+
+Lint/MixedRegexpCaptureTypes: # (new in 0.85)
+  Enabled: true
+
+Lint/OutOfRangeRegexpRef: # (new in 0.89)
+  Enabled: true
+
+Lint/RaiseException: # (new in 0.81)
+  Enabled: true
+
+Lint/RedundantSafeNavigation: # (new in 0.93)
+  Enabled: true
+
+Lint/SelfAssignment: # (new in 0.89)
+  Enabled: true
+
+Lint/StructNewOverride: # (new in 0.81)
+  Enabled: true
+
+Lint/TopLevelReturnWithArgument: # (new in 0.89)
+  Enabled: true
+
+Lint/TrailingCommaInAttributeDeclaration: # (new in 0.90)
+  Enabled: true
+
+Lint/UnreachableLoop: # (new in 0.89)
+  Enabled: true
+
+Lint/UselessMethodDefinition: # (new in 0.90)
+  Enabled: true
+
+Lint/UselessTimes: # (new in 0.91)
+  Enabled: true
+
+Style/AccessorGrouping: # (new in 0.87)
+  Enabled: true
+
+Style/BisectedAttrAccessor: # (new in 0.87)
+  Enabled: true
+
+Style/CaseLikeIf: # (new in 0.88)
+  Enabled: true
+
+Style/ClassEqualityComparison: # (new in 0.93)
+  Enabled: true
+
+Style/CombinableLoops: # (new in 0.90)
+  Enabled: true
+
+Style/ExplicitBlockArgument: # (new in 0.89)
+  Enabled: true
+
+Style/ExponentialNotation: # (new in 0.82)
+  Enabled: true
+
+Style/GlobalStdStream: # (new in 0.89)
+  Enabled: true
+
+Style/HashAsLastArrayItem: # (new in 0.88)
+  Enabled: true
+
+Style/HashLikeCase: # (new in 0.88)
+  Enabled: true
+
+Style/KeywordParametersOrder: # (new in 0.90)
+  Enabled: true
+
+Style/OptionalBooleanParameter: # (new in 0.89)
+  Enabled: true
+
+Style/RedundantAssignment: # (new in 0.87)
+  Enabled: true
+
+Style/RedundantFetchBlock: # (new in 0.86)
+  Enabled: true
+
+Style/RedundantFileExtensionInRequire: # (new in 0.88)
+  Enabled: true
+
+Style/RedundantRegexpCharacterClass: # (new in 0.85)
+  Enabled: true
+
+Style/RedundantRegexpEscape: # (new in 0.85)
+  Enabled: true
+
+Style/RedundantSelfAssignment: # (new in 0.90)
+  Enabled: true
+
+Style/SingleArgumentDig: # (new in 0.89)
+  Enabled: true
+
+Style/SlicingWithRange: # (new in 0.83)
+  Enabled: true
+
+Style/SoleNestedConditional: # (new in 0.89)
+  Enabled: true
+
+Style/StringConcatenation: # (new in 0.89)
+  Enabled: true
+
+RSpec/ExampleLength:
+  CountAsOne: ["array", "hash", "heredoc"]
+
+RSpec/ReturnFromStub:
+  Enabled: false
+
+RSpec/StubbedMock: # (new in 1.44)
+  Enabled: true
+
+RSpec/NestedGroups:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 5
+  Exclude:
+    - "features/**/*"
+
+RSpec/MessageSpies:
+  Enabled: false
+
+Performance/AncestorsInclude: # (new in 1.7)
+  Enabled: true
+
+Performance/BigDecimalWithNumericArgument: # (new in 1.7)
+  Enabled: true
+
+Performance/BlockGivenWithExplicitBlock: # (new in 1.9)
+  Enabled: true
+
+Performance/CollectionLiteralInLoop: # (new in 1.8)
+  Enabled: true
+
+Performance/ConstantRegexp: # (new in 1.9)
+  Enabled: true
+
+Performance/MethodObjectAsBlock: # (new in 1.9)
+  Enabled: true
+
+Performance/RedundantEqualityComparisonBlock: # (new in 1.10)
+  Enabled: true
+
+Performance/RedundantSortBlock: # (new in 1.7)
+  Enabled: true
+
+Performance/RedundantSplitRegexpArgument: # (new in 1.10)
+  Enabled: true
+
+Performance/RedundantStringChars: # (new in 1.7)
+  Enabled: true
+
+Performance/ReverseFirst: # (new in 1.7)
+  Enabled: true
+
+Performance/SortReverse: # (new in 1.7)
+  Enabled: true
+
+Performance/Squeeze: # (new in 1.7)
+  Enabled: true
+
+Performance/StringInclude: # (new in 1.7)
+  Enabled: true
+
+Performance/Sum: # (new in 1.8)
+  Enabled: true
+
