@@ -1,14 +1,15 @@
-require_relative 'thing'
+module Things
+  class Rope < Thing
 
-class Rope < Thing
+    def initialize(params)
+      params[:name] ||= 'Rope'
+      super(params)
+    end
 
-  def initialize(params)
-    params[:name] ||= 'Rope'
-    super(params)
-  end
+    def climbable?
+      true
+    end
 
-  def climbable?
-    true
   end
 
 end

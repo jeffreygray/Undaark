@@ -54,8 +54,8 @@ class Game
       dex:      15,
       int:      15
     }.freeze
-    @player = Player.new(player_params)
-    # @goblin = Player.new('Goblin', 1, 15, 15, 15)
+    @player = Things::Player.new(player_params)
+    # @goblin = Things::Player.new('Goblin', 1, 15, 15, 15)
     @world_map = WorldMap.new
   end
 

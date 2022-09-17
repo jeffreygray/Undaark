@@ -107,7 +107,7 @@ class WorldMap
             undead:            %w[Ghast Skeleton].include?(enemy)
           }
           dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1,
-                                  [Enemy.new(params)]
+                                  [Things::Enemy.new(params)]
           )
                         )
       end
@@ -119,9 +119,9 @@ class WorldMap
     if chest_min + chest_max + 1 == 2 * difficulty # if difficulty is odd
       chest_max += 1
     end
-    chest = Chest.new({ loot: random.rand(chest_min..chest_max) })
+    chest = Things::Chest.new({ loot: random.rand(chest_min..chest_max) })
     vault = Room.new('Dungeon Vault',
-                     'You reach a dead end in the dungeon, with a chest by the wall and a rope leading back up to the surface', -1, -1, -1, -1, [Rope.new({}), chest]
+                     'You reach a dead end in the dungeon, with a chest by the wall and a rope leading back up to the surface', -1, -1, -1, -1, [Things::Rope.new({}), chest]
     )
     dungeon.append(vault)
 
@@ -157,7 +157,7 @@ class WorldMap
   def pw
     @instances.each_with_index do |map, _instance|
       map.each_with_index do |room, inx|
-        puts "room:#{inx} n: #{room.n}, e: #{room.e}, s: #{room.s}, w: #{room.w} name: #{room.name}"
+        puts "room:#{inx} n: #{room.north}, e: #{room.east}, s: #{room.south}, w: #{room.west}, name: #{room.name}, description: #{room.desc}"
       end
     end
   end

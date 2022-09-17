@@ -1,22 +1,25 @@
-class Thing
+module Things
+  class Thing
 
-  attr_accessor :name, :description
+    attr_accessor :name, :description
 
-  def initialize(params)
-    @name = params[:name]
-    @description = params[:description] || ''
-  end
+    def initialize(params)
+      @name = params[:name]
+      @description = params[:description] || ''
+    end
 
-  def fights?
-    false
-  end
+    def fights?
+      false
+    end
 
-  def climbable?
-    false
-  end
+    def climbable?
+      false
+    end
 
-  def openable?
-    false
+    def openable?
+      false
+    end
+
   end
 
 end

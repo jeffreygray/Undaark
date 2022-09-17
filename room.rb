@@ -47,7 +47,7 @@ class Room
   def reanimate_undead
     s = ''
     objects.each do |object|
-      if object.is_a?(Enemy) && object.undead
+      if object.is_a?(Things::Enemy) && object.undead
         s += "#{object.reanimate}\n"
       end
     end
