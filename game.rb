@@ -4,16 +4,22 @@
 
 # TODO:
 
-# Make look show desc from thing
+# add rope thing to dungeon entrance. change "climb_rope" logic to look for climbable thing instead of room name
+# Make look show desc from thing. add desc to thing.to_s?
+# entity class enemy,player < entity < thing (since they share some attribs)
 # Nightmare event randomly during game tic?
 # List enemies command: don't know the syntax - attack ? ?
 #
 # implement puzzle room
+# something to spend cash on
 #
 # player equipment
 # health
 #
 # client/server
+# persistence (db)
+# player profiles
+# player logins
 # multiple players
 
 require_relative 'room'
