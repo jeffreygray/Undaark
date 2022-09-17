@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 
-# Change to server 
+# Change to server
 
 # TODO:
 
 # Make look show desc from thing
 # Nightmare event randomly during game tic?
+# List enemies command: don't know the syntax - attack ? ?
 #
 # implement puzzle room
 #
@@ -25,13 +26,12 @@ require_relative 'generators/room'
 require_relative 'quicksand_room'
 require 'byebug'
 
-
 OPPOSITE = {
   north: :south,
   south: :north,
-  east: :west,
-  west: :east
-}
+  east:  :west,
+  west:  :east
+}.freeze
 
 DIRS = %i[
   north
@@ -44,18 +44,18 @@ class Game
 
   attr_accessor :player, :world_map
 
-  def initialize()
+  def initialize
     # thing:   name = nil, description = nil)
     # player: location = 0, str = 15, dex = 15, int = 15)
     player_params = {
-      name: 'Adventurer',
+      name:     'Adventurer',
       location: 0,
-      str: 15,
-      dex: 15,
-      int: 15
+      str:      15,
+      dex:      15,
+      int:      15
     }.freeze
     @player = Player.new(player_params)
-   # @goblin = Player.new('Goblin', 1, 15, 15, 15)
+    # @goblin = Player.new('Goblin', 1, 15, 15, 15)
     @world_map = WorldMap.new
   end
 
@@ -66,19 +66,17 @@ class Game
       get_player_room.objects << @player
       @player.struggle_attempts = 0
       [true, get_player_room.reanimate_undead]
-    else
-      if get_player_room.has_combat
-          [false, "you try to leave but evil blocks your path!"]
-      elsif get_player_room.is_a? QuicksandRoom
-        if get_player_room.is_locked
-          @player.struggle_attempts += 1
-          [false, "You try to move but you're stuck in quicksand!"]
-        else
-          [false, "You can't move that way!"]
-        end
+    elsif get_player_room.has_combat
+      [false, 'you try to leave but evil blocks your path!']
+    elsif get_player_room.is_a? QuicksandRoom
+      if get_player_room.is_locked
+        @player.struggle_attempts += 1
+        [false, "You try to move but you're stuck in quicksand!"]
       else
         [false, "You can't move that way!"]
       end
+    else
+      [false, "You can't move that way!"]
     end
   end
 
@@ -93,49 +91,50 @@ class Game
   def perform_attack(enemy_name, attack)
     result = 0
     atk_conv = {
-      club: 'rock',
+      club:  'rock',
       slice: 'scissors',
       cover: 'paper'
     }
-    if not atk_conv.include? attack.to_sym
-      return [false, "invalid attack option"]
+    if !atk_conv.include? attack.to_sym
+      return [false, 'invalid attack option']
     end
+
     player_rps = atk_conv[attack.to_sym]
 
     enemy = get_player_room.get_enemy enemy_name
-    if enemy == nil
+    if enemy.nil?
       return [false, "no #{enemy_name} enemy present"]
     end
 
     adv = {
-      rock: 'scissors',
+      rock:     'scissors',
       scissors: 'paper',
-      paper: 'rock'
+      paper:    'rock'
     }
     if adv[player_rps.to_sym] == enemy.attack
       result = 1  # win
     elsif adv[enemy.attack.to_sym] == player_rps
       result = -1 # loss
     end
-    msg = ""
-    if result == 1
+    msg = ''
+    case result
+      when 1
         if !enemy.undead
-          get_player_room.desc += ", stone cold dead"
+          get_player_room.desc += ', stone cold dead'
         end
         msg = "#{@player.name} #{attack}s the enemy #{enemy.name}... the #{enemy.name} is defeated!"
         enemy.defeat
         msg
-    elsif result == -1
+      when -1
         msg = "#{@player.name} falls to the enemy #{enemy.name}'s attack!"
-    else
+      else
         msg = "#{@player.name} clashes with the #{enemy.name} but the fight continues!"
     end
     [true, msg]
   end
 
-
   def climb_rope
-    if ["Dungeon Entrance", "Dungeon Vault"].include? get_player_room.name
+    if ['Dungeon Entrance', 'Dungeon Vault'].include? get_player_room.name
       @player.leave_instance
       true
     else
@@ -147,32 +146,29 @@ class Game
     if @player.is_in_instance
       # already in a dungeon
       false
+    elsif seed.nil?
+      @player.enter_instance(@world_map.build_dungeon(4))
     else
-      if seed == nil
-        @player.enter_instance(@world_map.build_dungeon(4))
-      else
-        @player.enter_instance(@world_map.build_dungeon(4, seed))
-      end
+      @player.enter_instance(@world_map.build_dungeon(4, seed))
     end
   end
 
   def open_chest
     chest = get_player_room.get_thing('Chest')
-    msg = ""
-    if chest == nil
-      return [false, "there is no chest present"]
+    msg = ''
+    if chest.nil?
+      return [false, 'there is no chest present']
+    elsif chest.closed
+      msg = "#{@player.name} finds #{chest.loot} cash in the chest!"
+      chest.open(@player)
+      return [true, msg]
     else
-      if chest.closed
-        msg = "#{@player.name} finds #{chest.loot} cash in the chest!"
-        chest.open(@player)
-        return [true, msg]
-      else
-        return [false, "that chest has already been opened"]
-      end
+      return [false, 'that chest has already been opened']
     end
   end
 
   def player_adjacent_rooms
     @world_map.adjacent_rooms(@player.instance, @player.location)
   end
+
 end

@@ -10,6 +10,11 @@ This is an open source adventure game written in Ruby!
 > 2. <code>chmod +x client.rb</code>
 > 3. <code>./client.rb</code>
 
+### Style:
+> 1. View style offenses with <code>bundle exec rubocop</code>
+> 2. Auto-correct offenses with <code>bundle exec rubocop --safe-auto-correct</code>
+> 3. Auto-correct "unsafe" things with <code>bundle exec rubocop -A</code>
+
 ### To play:
 > 1. Walk around using directions <code>n, e, s, w</code>
 > 2. Check your surroundings with <code>scan</code>

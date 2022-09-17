@@ -32,7 +32,7 @@ Style/Documentation:
   Enabled: false
 
 Style/StringLiteralsInInterpolation:
-  EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
 
 Style/RegexpLiteral:
   EnforcedStyle: slashes
@@ -48,7 +48,7 @@ Style/FormatString:
   EnforcedStyle: percent
 
 Style/StringLiterals:
-  EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
 
 Style/DoubleNegation:
   Enabled: false

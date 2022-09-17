@@ -2,6 +2,7 @@ require 'byebug'
 require_relative 'thing'
 
 class Player < Thing
+
   attr_accessor :location, :instance, :str, :dex, :int, :struggle_attempts, :cash
 
   def initialize(params)
@@ -23,17 +24,16 @@ class Player < Thing
   end
 
   def leave_instance
-    if @return_location == nil
+    if @return_location.nil?
       puts("There's no instance to exit")
-    elsif
-      move_player(@return_location)
+    elsif move_player(@return_location)
       @return_location = nil
       @instance = 0
     end
   end
 
   def is_in_instance
-      @return_location != nil
+    !@return_location.nil?
   end
 
   def move_player(newroom)
@@ -43,10 +43,11 @@ class Player < Thing
   def look(room)
     s = "In a #{room.name}, you see:\n\n"
     saw_something = false
-    room.objects.each do |object| # Note: iterating
+    room.objects.each do |object| # NOTE: iterating
       if object == self
         next
       end
+
       saw_something = true
       s += "#{object}\n"
     end
