@@ -1,6 +1,7 @@
 require_relative 'thing'
 
 class Enemy < Thing
+    attr_accessor :undead
     
     # To be replaced.
     ROCK = 'rock'
@@ -30,10 +31,12 @@ class Enemy < Thing
         @location = params[:location] || 0
         @instance = params[:instance] || 0
         @combat_preference = params[:combat_preference] || ROCK
+        @undead = params[:undead] || false
+        @alive = true
     end
 
     def fights?
-        true
+        @alive
     end
 
     def attack
@@ -53,5 +56,16 @@ class Enemy < Thing
         "#{name}\n#{flavor[rand(0..2)].sub("#","#{name}")}"
     end
 
+    def defeat
+        @name = "#{@name} Corpse"
+        @alive = false
+    end
 
+    def reanimate
+      if @undead and !@alive
+        @alive = true
+        @name = @name.gsub(" Corpse", "")
+        "The #{@name} Corpse suddenly comes back to life!"
+      end
+    end
 end

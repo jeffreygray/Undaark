@@ -27,6 +27,7 @@ COMMANDS = { # constant-ish (frozen hash)
   west: WEST,
   w: WEST,
   quit: QUIT,
+  q: QUIT,
   look: LOOK,
   "look around": LOOK,
   scan: SCAN,
@@ -42,6 +43,9 @@ def move_player(dirshort)
   result = @game.move_player(dirshort)
   if result[0]
     puts("You moved #{dirshort}!")
+    if result[1] != ""
+      puts(result[1])
+    end
     puts(@game.get_player_room())
   else
     puts(result[1])
@@ -71,7 +75,7 @@ def run_command(input)
     elsif !is_valid_attack(inputArr[2])
       puts("You may only club, slice, or cover your opponent!")
     else
-        @game.perform_attack(inputArr[1], inputArr[2])
+      puts(@game.perform_attack(inputArr[1], inputArr[2]))
     end
   when NORTH
     move_player(NORTH)
