@@ -3,7 +3,7 @@ This is an open source adventure game written in Ruby!
 
 ### Requirements:
 > 1. Ruby 3.1.2 <code>rbenv install 3.1.2</code>
-> 2. byebug <code>gem install byebug</code>
+> 2. Install dependencies from Gemfile with <code>bundle install</code>
 
 ### To run:
 > 1. <code>git clone https://github.com/jeffreygray/Undaark.git</code>
@@ -17,3 +17,4 @@ This is an open source adventure game written in Ruby!
 > 4. See what's in your current room with <code>look</code>
 > 5. Find the rats!!! The current world record is 0.04 seconds by cberman.
 > 6. Quit the game with <code>quit</code> 
+
