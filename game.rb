@@ -67,7 +67,7 @@ class Game
       @player.move_player(@world_map.move_from_to(@player.instance, @player.location, dirshort))
       get_player_room.objects << @player
       @player.struggle_attempts = 0
-      [true]
+      [true, get_player_room.reanimate_undead]
     else
       if get_player_room.has_combat
           [false, "you try to leave but evil blocks your path!"]
@@ -121,9 +121,12 @@ class Game
     end
     msg = ""
     if result == 1
-        get_player_room.objects.delete(enemy)
-        get_player_room.desc += ", stone-cold dead"
+        if !enemy.undead
+          get_player_room.desc += ", stone cold dead"
+        end
         msg = "#{@player.name} #{attack}s the enemy #{enemy.name}... the #{enemy.name} is defeated!"
+        enemy.defeat
+        msg
     elsif result == -1
         msg = "#{@player.name} falls to the enemy #{enemy.name}'s attack!"
     else

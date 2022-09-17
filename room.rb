@@ -33,6 +33,16 @@ class Room
       return nil
   end
 
+  def reanimate_undead
+      s = ""
+      objects.each do |object|
+          if object.is_a? Enemy and object.undead
+              s += "#{object.reanimate}\n"
+          end
+      end
+      s
+  end
+
   # making this method instead of having [exits] in initializer since we build exits in world_map
   # TODO: Uncomment this or delete 
     # We might keep this or just use adjacent rooms

@@ -98,7 +98,8 @@ class WorldMap
           enemy = enemies[random.rand(enemies.length)]
           params = {
             name: enemy,
-            combat_preference: ['rock','paper','scissors'][rand(0..2)]
+            combat_preference: ['rock','paper','scissors'][rand(0..2)],
+            undead: ['Ghast', 'Skeleton'].include?(enemy)
           }
           dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [Enemy.new(params)]))
         end
