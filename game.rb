@@ -10,10 +10,7 @@
 # implement puzzle room
 #
 # player equipment
-# after things:
-  # dungeon vaults
-  # combat
-    # health
+# health
 #
 # client/server
 # multiple players
@@ -22,6 +19,7 @@ require_relative 'room'
 require_relative 'things/player'
 require_relative 'things/enemy'
 require_relative 'things/rope'
+require_relative 'things/chest'
 require_relative 'world_map'
 require_relative 'generators/room'
 require_relative 'quicksand_room'
@@ -151,9 +149,25 @@ class Game
       false
     else
       if seed == nil
-        @player.enter_instance(@world_map.build_dungeon(5))
+        @player.enter_instance(@world_map.build_dungeon(4))
       else
-        @player.enter_instance(@world_map.build_dungeon(5, seed))
+        @player.enter_instance(@world_map.build_dungeon(4, seed))
+      end
+    end
+  end
+
+  def open_chest
+    chest = get_player_room.get_thing('Chest')
+    msg = ""
+    if chest == nil
+      return [false, "there is no chest present"]
+    else
+      if chest.closed
+        msg = "#{@player.name} finds #{chest.loot} cash in the chest!"
+        chest.open(@player)
+        return [true, msg]
+      else
+        return [false, "that chest has already been opened"]
       end
     end
   end

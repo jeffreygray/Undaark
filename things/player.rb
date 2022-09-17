@@ -2,7 +2,7 @@ require 'byebug'
 require_relative 'thing'
 
 class Player < Thing
-  attr_accessor :location, :instance, :str, :dex, :int, :struggle_attempts
+  attr_accessor :location, :instance, :str, :dex, :int, :struggle_attempts, :cash
 
   def initialize(params)
     super # TODO: for Jeff, find out why this works and isn't in byebug/pry
@@ -13,6 +13,7 @@ class Player < Thing
     @dex = params[:dex]
     @int = params[:int]
     @struggle_attempts = 0
+    @cash = 0
   end
 
   def enter_instance(instance)

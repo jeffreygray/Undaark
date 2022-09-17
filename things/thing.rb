@@ -13,4 +13,8 @@ class Thing
     def climbable?
         false
     end
+
+    def openable?
+      false
+    end
 end

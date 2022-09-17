@@ -107,7 +107,13 @@ class WorldMap
       end
     end
 
-    vault = Room.new('Dungeon Vault', 'There\'s nothing here', -1, -1, -1, -1, [Rope.new({ name: 'rope' })])
+    chest_min = difficulty / 2
+    chest_max = difficulty * 3 / 2
+    if chest_min + chest_max + 1 == 2 * difficulty  # if difficulty is odd
+      chest_max += 1  
+    end
+    chest = Chest.new({loot: random.rand(chest_min..chest_max)})
+    vault = Room.new('Dungeon Vault', "You reach a dead end in the dungeon, with a chest by the wall and a rope leading back up to the surface", -1, -1, -1, -1, [Rope.new({}), chest])
     dungeon.append(vault)
 
     instance = add_instance(create_path(dungeon, random))

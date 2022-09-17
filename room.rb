@@ -33,6 +33,15 @@ class Room
       return nil
   end
 
+  def get_thing(thing_name)
+      objects.each do |object|
+          if object.name.downcase == thing_name.downcase
+              return object
+          end
+      end
+      return nil
+  end
+
   def reanimate_undead
       s = ""
       objects.each do |object|

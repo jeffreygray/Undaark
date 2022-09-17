@@ -14,6 +14,7 @@ SCAN = 'scan';
 ENTER = 'enter';
 CLIMB_ROPE = 'climb-rope';
 ATTACK = 'attack';
+OPEN = 'open';
 DEBUG = 'debug';
 
 
@@ -35,6 +36,7 @@ COMMANDS = { # constant-ish (frozen hash)
   climb: CLIMB_ROPE,
   "climb rope": CLIMB_ROPE,
   attack: ATTACK,
+  open: OPEN,
   debug: DEBUG # remove me ree!
 }.freeze
 
@@ -104,6 +106,13 @@ def run_command(input)
       puts(@game.get_player_room())
     else
       puts("You can't enter a dungeon here")
+    end
+  when OPEN
+    resp = @game.open_chest()
+    if resp[0]
+      puts(resp[1])
+    else
+      puts("Error: #{resp[1]}")
     end
   when DEBUG
     puts("Entering debug mode, use 'pw' to print the world")
