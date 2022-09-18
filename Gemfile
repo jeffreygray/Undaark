@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'byebug'
+gem 'pry'
 gem 'rubocop'
 gem 'rubocop-performance'
 gem 'rubocop-rspec'
@@ -9,4 +10,3 @@ gem 'rspec-core'
 gem 'rspec-expectations'
 gem 'rspec-mocks'
 gem 'rspec-support'
-

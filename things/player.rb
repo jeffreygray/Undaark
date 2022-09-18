@@ -2,6 +2,7 @@ require 'byebug'
 require_relative 'thing'
 
 module Things
+
   class Player < Thing
 
     attr_accessor :location, :instance, :str, :dex, :int, :struggle_attempts, :cash

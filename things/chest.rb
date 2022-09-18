@@ -1,4 +1,5 @@
 module Things
+
   class Chest < Thing
 
     attr_accessor :loot, :closed

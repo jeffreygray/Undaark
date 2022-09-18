@@ -1,4 +1,5 @@
 module Things
+
   class Enemy < Thing
 
     attr_accessor :undead

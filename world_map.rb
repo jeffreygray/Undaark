@@ -52,9 +52,7 @@ class WorldMap
       Random.new seed
     end
 
-    entrance = Room.new('Dungeon Entrance', 'A rope descending down into a dungeon... or heading back out?', -1, -1,
-                        -1, -1, []
-    )
+    entrance = Room.new('Dungeon Entrance', 'A rope descending down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
     dungeon = [entrance]
     last_room = :entrance
 
@@ -106,10 +104,7 @@ class WorldMap
             combat_preference: %w[rock paper scissors][rand(0..2)],
             undead:            %w[Ghast Skeleton].include?(enemy)
           }
-          dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1,
-                                  [Things::Enemy.new(params)]
-          )
-                        )
+          dungeon.append(Room.new('Combat Room', "A single #{enemy} stands in the room", -1, -1, -1, -1, [Things::Enemy.new(params)]))
       end
       last_room = next_room
     end
@@ -120,9 +115,7 @@ class WorldMap
       chest_max += 1
     end
     chest = Things::Chest.new({ loot: random.rand(chest_min..chest_max) })
-    vault = Room.new('Dungeon Vault',
-                     'You reach a dead end in the dungeon, with a chest by the wall and a rope leading back up to the surface', -1, -1, -1, -1, [Things::Rope.new({}), chest]
-    )
+    vault = Room.new('Dungeon Vault', 'You reach a dead end in the dungeon, with a chest by the wall and a rope leading back up to the surface', -1, -1, -1, -1, [Things::Rope.new({}), chest])
     dungeon.append(vault)
 
     instance = add_instance(create_path(dungeon, random))

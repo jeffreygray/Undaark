@@ -2,9 +2,7 @@ class Room
 
   attr_accessor :name, :desc, :north, :east, :south, :west, :objects
 
-  def initialize(name = 'The Void', desc = "There's nothing here!", north = -1, east = -1, south = -1, west = -1,
-                 objects = []
-  )
+  def initialize(name = 'The Void', desc = "There's nothing here!", north = -1, east = -1, south = -1, west = -1, objects = [])
     @name = name
     @desc = desc
     @north = north

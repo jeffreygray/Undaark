@@ -127,7 +127,7 @@ Style/HashTransformValues:
 # --- Layout settings
 
 Layout/LineLength:
-  Max: 120
+  Max: 255
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
@@ -149,15 +149,15 @@ Layout/EmptyLinesAroundBeginBody:
 
 # Enforce empty lines around block bodies
 Layout/EmptyLinesAroundBlockBody:
-  Enabled: false
+  Enabled: true
 
 # Enforce empty lines inside class definitions
 Layout/EmptyLinesAroundClassBody:
-  EnforcedStyle: empty_lines_except_namespace
+  EnforcedStyle: empty_lines
 
 # Enforce empty lines inside module definition
 Layout/EmptyLinesAroundModuleBody:
-  EnforcedStyle: empty_lines_except_namespace
+  EnforcedStyle: empty_lines
 
 Layout/EmptyLinesAroundExceptionHandlingKeywords:
   Enabled: false

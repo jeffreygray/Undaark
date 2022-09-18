@@ -1,4 +1,5 @@
 module Things
+
   class Thing
 
     attr_accessor :name, :description

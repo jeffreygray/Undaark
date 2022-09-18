@@ -1,4 +1,5 @@
 module Things
+
   class Rope < Thing
 
     def initialize(params)
