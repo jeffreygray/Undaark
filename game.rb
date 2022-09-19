@@ -4,7 +4,6 @@
 
 # TODO:
 
-# add rope thing to dungeon entrance. change "climb_rope" logic to look for climbable thing instead of room name
 # Make look show desc from thing. add desc to thing.to_s?
 # entity class enemy,player < entity < thing (since they share some attribs)
 # Nightmare event randomly during game tic?
@@ -140,7 +139,7 @@ class Game
   end
 
   def climb_rope
-    if ['Dungeon Entrance', 'Dungeon Vault'].include? get_player_room.name
+    if get_player_room.has_rope
       @player.leave_instance
       true
     else

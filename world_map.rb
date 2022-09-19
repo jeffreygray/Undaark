@@ -52,7 +52,7 @@ class WorldMap
       Random.new seed
     end
 
-    entrance = Room.new('Dungeon Entrance', 'A rope descending down into a dungeon... or heading back out?', -1, -1, -1, -1, [])
+    entrance = Room.new('Dungeon Entrance', 'A rope descending down into a dungeon... or heading back out?', -1, -1, -1, -1, [Things::Rope.new({})])
     dungeon = [entrance]
     last_room = :entrance
 
