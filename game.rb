@@ -166,6 +166,7 @@ class Game
     elsif chest.closed
       msg = "#{@player.name} finds #{chest.loot} cash in the chest!"
       chest.open(@player)
+      msg += "\n#{@player.name} now has #{@player.cash} cash"
       return [true, msg]
     else
       return [false, 'that chest has already been opened']
