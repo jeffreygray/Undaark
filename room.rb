@@ -16,6 +16,10 @@ class Room
     false
   end
 
+  def has_rope
+    objects.any?(&:climbable?)
+  end
+
   def has_combat
     objects.any?(&:fights?)
   end
