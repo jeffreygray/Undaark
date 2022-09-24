@@ -1,55 +1,27 @@
 #!/usr/bin/env ruby
 
-require_relative 'game'
+require_relative 'constants'
 require 'byebug'
 
 # vars, etc
-NORTH = 'north'.freeze
-EAST = 'east'.freeze
-SOUTH = 'south'.freeze
-WEST = 'west'.freeze
-QUIT = 'quit'.freeze
-LOOK = 'look'.freeze
-SCAN = 'scan'.freeze
-ENTER = 'enter'.freeze
-CLIMB_ROPE = 'climb-rope'.freeze
-ATTACK = 'attack'.freeze
-OPEN = 'open'.freeze
-DEBUG = 'debug'.freeze
-
-COMMANDS = { # constant-ish (frozen hash)
-  north:         NORTH,
-  n:             NORTH,
-  east:          EAST,
-  e:             EAST,
-  south:         SOUTH,
-  s:             SOUTH,
-  west:          WEST,
-  w:             WEST,
-  quit:          QUIT,
-  q:             QUIT,
-  look:          LOOK,
-  "look around": LOOK,
-  scan:          SCAN,
-  enter:         ENTER,
-  climb:         CLIMB_ROPE,
-  "climb rope":  CLIMB_ROPE,
-  attack:        ATTACK,
-  open:          OPEN,
-  debug:         DEBUG # remove me ree!
-}.freeze
 
 def move_player(dirshort)
-  result = @game.move_player(dirshort)
-  if result[0]
-    puts("You moved #{dirshort}!")
-    if result[1] != ''
+  send_command(['move',dirshort], -> (result) do
+    result = result.split(";")
+    if result[0] == "true"
+      puts("You moved #{dirshort}!")
+      if result[1] != ''
+        puts(result[1])
+      end
+      get_player_room(-> (resp) do
+        puts(resp)
+        request_input()        
+      end)
+    else
       puts(result[1])
+      request_input()
     end
-    puts(@game.get_player_room)
-  else
-    puts(result[1])
-  end
+  end)
 end
 
 def is_valid_attack(attack)
@@ -71,17 +43,18 @@ def run_command(input)
     when ATTACK
       if inputArr.length != 3
         puts('You must choose an enemy and an attack! That is all!')
-      elsif !@game.get_player_room.has_enemy(inputArr[1])
-        puts("A #{inputArr[1]} is not present!")
       elsif !is_valid_attack(inputArr[2])
         puts('You may only club, slice, or cover your opponent!')
       else
-        resp = @game.perform_attack(inputArr[1], inputArr[2])
-        if resp[0]
-          puts(resp[1])
-        else
-          puts("Error: #{resp[1]}")
-        end
+        perform_attack(inputArr[1], inputArr[2], -> (resp) do
+          resp = resp.split(";")
+          if resp[0]
+            puts(resp[1])
+          else
+            puts("Error: #{resp[1]}")
+          end
+          request_input()
+        end)
       end
     when NORTH
       move_player(NORTH)
@@ -92,30 +65,49 @@ def run_command(input)
     when WEST
       move_player(WEST)
     when LOOK
-      @game.player_look
+      look(-> (resp) do 
+        puts(resp)
+        request_input()
+      end)
     when CLIMB_ROPE
-      if @game.climb_rope
-        puts("You climb the rope back up to the #{@game.get_player_room}")
-      else
-        puts("There's no rope here to climb")
-      end
+      climb_rope(-> (resp) do 
+        if resp
+          get_player_room(-> (resp2) do
+            puts("You climb the rope back up to the #{resp2}")
+            request_input()
+          end)
+        else
+          puts("There's no rope here to climb")
+          request_input()
+        end
+      end)
     when ENTER
-      if @game.enter_dungeon
-        puts('You entered a new dungeon!')
-        puts(@game.get_player_room)
-      else
-        puts("You can't enter a dungeon here")
-      end
+      enter_dungeon(-> (resp) do
+        if(resp)
+          puts('You entered a new dungeon!')
+          get_player_room(-> (resp2) do
+            puts(resp2)
+            request_input()
+          end)
+        else
+          puts("You can't enter a dungeon here")
+          request_input()
+        end
+      end)
     when OPEN
-      resp = @game.open_chest
-      if resp[0]
-        puts(resp[1])
-      else
-        puts("Error: #{resp[1]}")
-      end
+      open_chest(-> (resp) do
+        resp = resp.split(";")
+        if resp[0] == "true"
+          puts(resp[1])
+        else
+          puts("Error: #{resp[1]}")
+        end
+        request_input()
+      end)
     when DEBUG
       puts("Entering debug mode, use 'pw' to print the world")
       byebug
+      request_input()
     when SCAN
       scan
     when QUIT
@@ -123,42 +115,90 @@ def run_command(input)
       exit
     else
       puts("#{input} unrecognized... please try another command.")
+      request_input()
   end
 end
 
+def perform_attack(enemy, attack, callback = nil)
+  send_command(['attack',enemy, attack], callback)
+end
+
 def scan
-  adj = @game.player_adjacent_rooms
-  # byebug
-  s = ''
-  # roll dice related to some future perception check, you see a "room.name"
-  s += "North of you, you see: #{adj[:north].name}\n" if adj[:north]
-  s += "To the east, you see: #{adj[:east].name}\n" if adj[:east]
-  s += "Towards the south, you see: #{adj[:south].name}\n" if adj[:south]
-  s += "As you look westward, you see: #{adj[:west].name}\n" if adj[:west]
-  "#{s}\n"
+  send_command(['player_adjacent_rooms'], -> (adj) do
+    adj = adj.split(";")
+    s = ''
+    # roll dice related to some future perception check, you see a "room.name"
+    s += "North of you, you see: #{adj[0]}\n" if adj[0] != "nil"
+    s += "To the east, you see: #{adj[1]}\n" if adj[1] != "nil"
+    s += "Towards the south, you see: #{adj[2]}\n" if adj[2] != "nil"
+    s += "As you look westward, you see: #{adj[3]}\n" if adj[3] != "nil"
+    puts("#{s}\n")
+    request_input()
+  end)
+end
+
+def look(callback = nil)
+  send_command(['look'], callback)
+end
+
+def climb_rope(callback = nil)
+  send_command(['climb_rope'], callback)
+end
+
+def enter_dungeon(callback = nil)
+  send_command(['enter_dungeon'], callback)
+end
+
+def get_player_room(callback = nil)
+  send_command(['get_player_room'], callback)
+end
+
+def open_chest(callback)
+  send_command(['open_chest'], callback)
 end
 
 # Game Loop
 def start_game
   name = 'Adventurer'
-  input = ''
-  output = ''
-  location = @game.get_player_room
-  location = if 'aeiou'.include? location.to_s.downcase[0]
-    "an #{location}"
-  else
-    "a #{location}"
+  callback = -> (location) do
+
+    location = if 'aeiou'.include? location.to_s.downcase[0]
+      "an #{location}"
+    else
+      "a #{location}"
+    end
+    puts("Welcome, #{name}. What would you like to do? You are in #{location}")
   end
-  s = "Welcome, #{name}. What would you like to do? You're in #{location}" # Sara says we should look at how we handle the grammar of this one. Should (a) be in the room generator?
-  puts(s)
-  loop do
-    print('> ')
-    input = gets
-    # TODO: make this do shit
-    output = run_command(input)
-    puts(output)
+  get_player_room(callback)
+  request_input()
+#  loop do
+#    print('> ')
+#    input = gets
+#    # TODO: make this do shit
+#    # For server, we need to decide how and when data gets sent to the server. For now I'm going to make the wait blocking until we decide
+#    output = run_command(input)
+#    puts(output)
+#  end
+end
+
+def request_input()
+  print('> ')
+  input = gets
+  run_command(input)
+end
+
+def send_command(data, callback)
+  Async do |task|
+    @endpoint.connect do |peer|
+      peer.write(data.join(" "))
+      peer.close_write
+      resp = peer.read
+      if(callback)
+        callback.call(resp)
+      end
+    end
   end
 end
 
-@game = Game.new
+@endpoint = ENDPOINT
 start_game

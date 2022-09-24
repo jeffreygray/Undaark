@@ -8,7 +8,9 @@ This is an open source adventure game written in Ruby!
 ### To run:
 > 1. <code>git clone https://github.com/jeffreygray/Undaark.git</code>
 > 2. <code>chmod +x client.rb</code>
-> 3. <code>./client.rb</code>
+> 3. <code>chmod +x server.rb</code>
+> 4. <code>./server.rb</code>
+> 5. <code>./client.rb</code>
 
 ### Style:
 > 1. View style offenses with <code>bundle exec rubocop</code>

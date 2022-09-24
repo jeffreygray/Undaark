@@ -1,3 +1,5 @@
+require_relative 'constants'
+
 class WorldMap
 
   attr_accessor :instances

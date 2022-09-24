@@ -31,6 +31,7 @@ require_relative 'world_map'
 require_relative 'generators/room'
 require_relative 'quicksand_room'
 require 'byebug'
+require 'json'
 
 OPPOSITE = {
   north: :south,
@@ -46,7 +47,7 @@ DIRS = %i[
   west
 ].freeze
 
-class Game
+class Server
 
   attr_accessor :player, :world_map
 
@@ -63,6 +64,44 @@ class Game
     @player = Things::Player.new(player_params)
     # @goblin = Things::Player.new('Goblin', 1, 15, 15, 15)
     @world_map = WorldMap.new
+    @endpoint = ENDPOINT
+    @server = start_server(@endpoint)
+  end
+
+  def start_server(endpoint)
+    Async do |task|
+      endpoint.accept do |client|
+        data = client.read
+        resp = run_command(data.downcase.split(" "))
+        client.write(resp)
+        client.close_write
+      end
+    end
+  end
+
+  def run_command(args)
+    case args[0]
+    when 'get_player_room'
+      return get_player_room.to_s
+    when 'move'
+      puts("move #{args[1]}")
+      return move_player(args[1]).join(";").to_s
+    when 'look'
+      return player_look.to_s
+    when 'climb_rope'
+      return climb_rope.to_s
+    when 'enter_dungeon'
+      return enter_dungeon.to_s
+    when 'open_chest'
+      return open_chest.join(";").to_s
+    when 'player_adjacent_rooms'
+      return player_adjacent_rooms.map do |room|
+        room[1].nil? ? "nil" : room[1].to_s
+      end.join(";")
+    when 'attack'
+      return perform_attack(args[1], args[2]).join(";").to_s
+    end
+    "SUCCESS I GUESS"
   end
 
   def move_player(dirshort)
@@ -178,3 +217,5 @@ class Game
   end
 
 end
+
+Server.new
