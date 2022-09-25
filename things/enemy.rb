@@ -45,6 +45,8 @@ module Things
     end
 
     def to_s
+      if @alive
+        return "#{name}\nIt\'s pretty dead. Promise. I checked"
       flavor = []
       case @combat_preference
         when ROCK

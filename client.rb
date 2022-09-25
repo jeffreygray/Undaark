@@ -153,24 +153,28 @@ def get_player_room(callback = nil)
   send_command(['get_player_room'], callback)
 end
 
-def open_chest(callback)
+def open_chest(callback = nil)
   send_command(['open_chest'], callback)
+end
+
+def init_player(callback = nil)
+  send_command(['init_player'], callback)
 end
 
 # Game Loop
 def start_game
-  name = 'Adventurer'
-  callback = -> (location) do
-
-    location = if 'aeiou'.include? location.to_s.downcase[0]
-      "an #{location}"
-    else
-      "a #{location}"
-    end
-    puts("Welcome, #{name}. What would you like to do? You are in #{location}")
-  end
-  get_player_room(callback)
-  request_input()
+  init_player(-> (name) do
+    @name = name
+    get_player_room(-> (location) do
+      location = if 'aeiou'.include? location.to_s.downcase[0]
+          "an #{location}"
+        else
+          "a #{location}"
+        end
+      puts("Welcome, #{@name}. What would you like to do? You are in #{location}")
+      request_input()
+    end)
+  end)
 #  loop do
 #    print('> ')
 #    input = gets
@@ -183,13 +187,14 @@ end
 
 def request_input()
   print('> ')
-  input = gets
+  input = STDIN.gets
   run_command(input)
 end
 
 def send_command(data, callback)
   Async do |task|
     @endpoint.connect do |peer|
+      data.unshift(ARGV[0])
       peer.write(data.join(" "))
       peer.close_write
       resp = peer.read

@@ -11,6 +11,10 @@ module Things
       true
     end
 
+    def to_s
+      "a rope"
+    end
+
   end
 
 end

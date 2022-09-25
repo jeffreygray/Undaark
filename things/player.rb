@@ -43,7 +43,13 @@ module Things
     end
 
     def look(room)
-      s = "In a #{room.name}, you see:\n\n"
+      location = 
+        if 'aeiou'.include? room.name.to_s.downcase[0]
+          "an #{room.name}"
+        else
+          "a #{room.name}"
+        end
+      s = "In #{location}, you see:\n\n"
       saw_something = false
       room.objects.each do |object| # NOTE: iterating
         if object == self
@@ -58,6 +64,10 @@ module Things
       else
         "#{s}Nothing\n\n"
       end
+    end
+
+    def to_s
+      @name
     end
 
   end
